@@ -12,7 +12,10 @@ class BP_Repost_Activity {
 	public function __construct() {
 
 		add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_repost_button' ) );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ) );
+
+		add_action( 'bp_activity_new_update_content', array( $this, 'bprpa_repost_activity' ), 10 );
 
 	}
 
@@ -41,6 +44,47 @@ class BP_Repost_Activity {
 			'',
 			true
 		);
+	}
+
+	public function bprpa_repost_activity( $content ) {
+
+		$original_item_id = filter_input( INPUT_POST , 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+
+		if ( empty( $original_item_id ) ) {
+			return $content;
+		}
+
+		$activity = $this->bprpa_get_activity( $original_item_id );
+
+		if ( empty( $activity ) ) {
+			return $content;
+		}
+
+		$content = ! empty( $activity->content ) ? $activity->content : '&nbsp;';
+
+		return $content;
+
+	}
+
+	public function bprpa_get_activity( $activty_id = '' ) {
+
+		if ( empty( $activty_id ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		$activty_table = $wpdb->prefix . 'bp_activity';
+
+		$activity_sql = $wpdb->prepare(
+			"SELECT * FROM {$activty_table} WHERE id = %d",
+			intval( $activty_id )
+		);
+
+		$activity = $wpdb->get_row( $activity_sql );
+
+		return $activity;
+
 	}
 
 }

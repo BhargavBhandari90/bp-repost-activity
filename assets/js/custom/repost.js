@@ -8,46 +8,54 @@ var currentRequest = null;
 
 		init: function() {
 
-			this.bp_repost();
+			this.bprpa_repost();
+			this.bprpa_set_param();
 
 		},
 
-		bp_repost: function() {
+		bprpa_set_param: function() {
+
+			$.ajaxPrefilter( function ( options, originalOptions, jqXHR ) {
+
+				// Check if form is available or not.
+				if ( $( '.bp-repost-activity' ).length == 0 ) {
+					return true;
+				}
+
+
+				// Modify options, control originalOptions, store jqXHR, etc
+				try {
+					if ( originalOptions.data == null || typeof (originalOptions.data) === 'undefined' || typeof (originalOptions.data.action) === 'undefined' ) {
+						return true;
+					}
+				} catch ( e ) {
+					return true;
+				}
+
+				var original_activity_id = $( '.bp-repost-activity.repost-selected' ).data( 'activity_id' );
+
+				// Set form data into activity ajax.
+				if ( typeof( original_activity_id ) !== 'undefined' && originalOptions.data.action === 'post_update' ) {
+					options.data += '&original_item_id=' + original_activity_id + '&content=repost';
+				}
+
+			} );
+
+		},
+
+		bprpa_repost: function() {
 
 			$( document ).on( 'click', '.bp-repost-activity', function( e ){
 
 				e.preventDefault();
 
-				var data = {
-					action               : 'post_update',
-					cookie               : bp_get_cookies(),
-					_wpnonce_post_update : $('#_wpnonce_post_update').val(),
-					object               : '',
-					content              : '&nbsp;',
-					item_id              : '',
-					secondary_item_id    : $( this ).data( 'activity_id' ),
-					_bp_as_nonce         : $('#_bp_as_nonce').val() || ''
+				if ( $( '.bp-repost-activity' ).hasClass( 'repost-selected' ) ) {
+					$( '.bp-repost-activity' ).removeClass( 'repost-selected' );
 				}
 
-				// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-				var currentRequest = $.ajax({
-					type : 'post',
-					url  : ajaxurl,
-					data : data,
-					beforeSend : function() {
-						if( currentRequest != null ) {
+				$( this ).addClass( 'repost-selected' );
 
-							currentRequest.abort();
-
-						}
-					},
-					success : function( response ) {
-
-						alert(response);
-
-					}
-
-				});
+				$('#aw-whats-new-submit').trigger( 'click' );
 
 			});
 
