@@ -55,7 +55,16 @@ var currentRequest = null;
 
 				$( this ).addClass( 'repost-selected' );
 
-				$('#aw-whats-new-submit').trigger( 'click' );
+				var activity_id      = $( this ).data( 'activity_id' ),
+				    original_content = $( '#activity-stream #activity-' + activity_id + ' .activity-inner' ).html();
+
+				console.log(original_content);
+				console.log(activity_id);
+
+				$( '#repost-activity-form #original_item_id' ).val( activity_id );
+				$( '#repost-activity-form .content' ).html( original_content );
+
+				// $('#aw-whats-new-submit').trigger( 'click' );
 
 			});
 

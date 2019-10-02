@@ -1,0 +1,15 @@
+html {
+	font-size: unset !important;
+}
+
+.thickbox-loading {
+  display:flex;
+  flex-direction: column;
+  width: 50% !important;
+  height: auto;
+
+  #TB_ajaxContent {
+  	width: auto !important;
+  	height: auto !important;
+  }
+}
