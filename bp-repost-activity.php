@@ -47,3 +47,4 @@ if ( ! defined( 'BPRPA_BASE_NAME' ) ) {
 
 // Include functions file.
 require BPRPA_PATH . 'app/main/class-bp-repost-activity.php';
+require BPRPA_PATH . 'app/admin/class-bp-repost-activity-admin.php';

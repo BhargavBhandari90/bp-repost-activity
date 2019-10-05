@@ -237,10 +237,16 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Bail, if anything goes wrong.
 			if ( ! function_exists( 'bp_is_current_component' ) ||
 				 ! function_exists( 'bp_is_single_activity' ) ||
-				 ! function_exists( 'bp_is_group_activity' ) ) {
+				 ! function_exists( 'bp_is_group_activity' ) ||
+				 ! function_exists( 'bp_get_option' ) ) {
 
 				return false;
 
+			}
+
+			// Check if it's enabled from BuddyPress Settings.
+			if ( '1' != bp_get_option( '_bprpa_enable_setting', 1 ) ) {
+				return false;
 			}
 
 			// If it's activity stram of user activity, group activity or main activity
