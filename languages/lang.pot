@@ -20,7 +20,7 @@ msgstr ""
 msgid "Re-Post Activity"
 msgstr ""
 
-#: app/admin/class-bp-repost-activity-admin.php:61
+#: app/admin/class-bp-repost-activity-admin.php:62
 msgid "Allow users to re-post activity from activity stream"
 msgstr ""
 

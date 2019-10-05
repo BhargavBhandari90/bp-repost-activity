@@ -45,6 +45,24 @@ if ( ! defined( 'BPRPA_BASE_NAME' ) ) {
 	define( 'BPRPA_BASE_NAME', plugin_basename( __FILE__ ) );
 }
 
+/**
+ * Apply transaltion file as per WP language.
+ */
+function bprpa_text_domain_loader() {
+
+	// Get mo file as per current locale.
+    $mofile = BPRPA_PATH . 'languages/' . get_locale() .'.mo';
+
+    // If file does not exists, then applu default mo.
+    if ( ! file_exists( $mofile ) ) {
+    	$mofile = BPRPA_PATH . 'languages/default.mo';
+    }
+
+    load_textdomain( 'bp-repost-activity', $mofile );
+}
+
+add_action('plugins_loaded', 'bprpa_text_domain_loader');
+
 // Include functions file.
 require BPRPA_PATH . 'app/main/class-bp-repost-activity.php';
 require BPRPA_PATH . 'app/admin/class-bp-repost-activity-admin.php';

@@ -16,7 +16,7 @@ msgstr ""
 "PO-Revision-Date: \n"
 "X-Generator: Poedit 2.2.4\n"
 "Last-Translator: \n"
-"Language: es\n"
+"Language: en_US\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
