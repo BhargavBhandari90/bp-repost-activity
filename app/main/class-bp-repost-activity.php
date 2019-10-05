@@ -145,13 +145,13 @@ class BP_Repost_Activity {
 		// Custom style.
 		wp_enqueue_style(
 			'repost-style',
-			BPRPA_URL . 'assets/css/style.min.css',
+			BPRPA_URL . 'assets/css/style.min.css'
 		);
 
 		// Bootstrap css.
 		wp_enqueue_style(
 			'bootstrap-style',
-			BPRPA_URL . 'assets/css/bootstrap.min.css',
+			BPRPA_URL . 'assets/css/bootstrap.min.css'
 		);
 
 	}
