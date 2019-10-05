@@ -16,26 +16,26 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: app/main/class-bp-repost-activity.php:64
+#: app/main/class-bp-repost-activity.php:62
 msgid "Post in"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:67
+#: app/main/class-bp-repost-activity.php:65
 msgid "Public"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:70
+#: app/main/class-bp-repost-activity.php:68
 msgid "Group"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:89
+#: app/main/class-bp-repost-activity.php:87
 msgid "Close"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:90
+#: app/main/class-bp-repost-activity.php:88
 msgid "Post"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:113
+#: app/main/class-bp-repost-activity.php:111
 msgid "Re-Post"
 msgstr ""
