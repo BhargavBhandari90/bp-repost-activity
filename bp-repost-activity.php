@@ -51,17 +51,17 @@ if ( ! defined( 'BPRPA_BASE_NAME' ) ) {
 function bprpa_text_domain_loader() {
 
 	// Get mo file as per current locale.
-    $mofile = BPRPA_PATH . 'languages/' . get_locale() .'.mo';
+	$mofile = BPRPA_PATH . 'languages/' . get_locale() .'.mo';
 
-    // If file does not exists, then applu default mo.
-    if ( ! file_exists( $mofile ) ) {
-    	$mofile = BPRPA_PATH . 'languages/default.mo';
-    }
+	// If file does not exists, then applu default mo.
+	if ( ! file_exists( $mofile ) ) {
+		$mofile = BPRPA_PATH . 'languages/default.mo';
+	}
 
-    load_textdomain( 'bp-repost-activity', $mofile );
+	load_textdomain( 'bp-repost-activity', $mofile );
 }
 
-add_action('plugins_loaded', 'bprpa_text_domain_loader');
+add_action( 'plugins_loaded', 'bprpa_text_domain_loader' );
 
 /**
  * Display admin notice if BuddyPress is not activated.
