@@ -63,6 +63,39 @@ function bprpa_text_domain_loader() {
 
 add_action('plugins_loaded', 'bprpa_text_domain_loader');
 
+/**
+ * Display admin notice if BuddyPress is not activated.
+ */
+function bprpa_admin_notice_error() {
+
+	if ( function_exists( 'bp_is_active' ) ) {
+		return;
+	}
+
+	// Notice class.
+	$class = 'notice notice-error';
+
+	// Get plugin name.
+	$plugin_data = get_plugin_data( __FILE__ );
+	$plugin_name = $plugin_data['Name'];
+
+	// Display error if BuddyPress is not active.
+	$message = sprintf(
+		__( '%s works with BuddyPress only. Please activate BuddyPress or de-activate %s.', 'bp-repost-activity' ),
+		esc_html( $plugin_name ),
+		esc_html( $plugin_name )
+	);
+
+	printf(
+		'<div class="%1$s"><p>%2$s</p></div>',
+		esc_attr( $class ),
+		esc_html( $message )
+	);
+
+}
+
+add_action( 'admin_notices', 'bprpa_admin_notice_error' );
+
 // Include functions file.
 require BPRPA_PATH . 'app/main/class-bp-repost-activity.php';
 require BPRPA_PATH . 'app/admin/class-bp-repost-activity-admin.php';
