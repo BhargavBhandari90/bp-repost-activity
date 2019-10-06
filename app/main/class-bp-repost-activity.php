@@ -100,7 +100,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function bprpa_repost_button() {
 
 			// Bail, if anything goes wrong.
-			if ( ! $this->bprpa_is_activity_strem() ) {
+			if ( ! $this->bprpa_is_activity_strem() || function_exists( 'bp_get_activity_type' ) && 'activity_update' !== bp_get_activity_type() ) {
 				return;
 			}
 
