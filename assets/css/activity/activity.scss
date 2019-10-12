@@ -11,3 +11,14 @@ html {
 	    overflow-y: scroll;
 	}
 }
+
+#repost-activity-form {
+	.rtmedia-activity-container {
+		.rtm-activity-media-list {
+			.rtmedia-list-item {
+				width: 30% !important;
+    			height: auto !important;
+			}
+		}
+	}
+}

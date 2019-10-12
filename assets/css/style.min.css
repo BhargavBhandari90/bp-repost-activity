@@ -1,2 +1,3 @@
 html{font-size:unset !important}
 #repost-box .modal-body{max-height:300px;overflow:hidden;overflow-y:scroll}
+#repost-activity-form .rtmedia-activity-container .rtm-activity-media-list .rtmedia-list-item{width:30% !important;height:auto !important}
