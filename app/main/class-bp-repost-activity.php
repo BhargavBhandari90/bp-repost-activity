@@ -27,7 +27,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_repost_button' ) );
 
 			// Add custom script.
-			add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ), 99 );
 
 			// Add content for public activity.
 			add_action( 'bp_activity_new_update_content', array( $this, 'bprpa_repost_activity_content' ), 10 );
@@ -151,6 +151,15 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				'bootstrap-style',
 				BPRPA_URL . 'assets/css/bootstrap.min.css'
 			);
+
+			// Set params to be used in custom script.
+			$params = array(
+				'theme_package_id' => function_exists( 'bp_get_option' )
+					? bp_get_option( '_bp_theme_package_id', 'legacy' )
+					: 'legacy',
+			);
+
+			wp_localize_script( 'repost-script', 'RE_Post_Activity', $params );
 
 		}
 

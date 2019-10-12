@@ -1,3 +1,4 @@
+/* global RE_Post_Activity */
 var currentRequest = null;
 
 ( function ( $ ) {
@@ -77,8 +78,20 @@ var currentRequest = null;
 
 				e.preventDefault();
 
-				// Submit buddypress update form.
-				$('#aw-whats-new-submit').trigger( 'click' );
+				if ( typeof( RE_Post_Activity.theme_package_id ) === 'undefined' ) {
+					return;
+				}
+
+				// Click if it's legacy.
+				if ( 'legacy' === RE_Post_Activity.theme_package_id ) {
+
+					$( '#aw-whats-new-submit' ).trigger( 'click' );
+
+				} else { // Submit, if nouveau.
+
+					$( '#whats-new-form' ).trigger( 'submit' );
+
+				}
 
 			} );
 

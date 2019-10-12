@@ -1,5 +1,6 @@
 "use strict";
 
+/* global RE_Post_Activity */
 var currentRequest = null;
 
 (function ($) {
@@ -58,9 +59,19 @@ var currentRequest = null;
     bprpa_repost: function bprpa_repost() {
       // When we submit repost form.
       $(document).on('submit', '#repost-activity-form', function (e) {
-        e.preventDefault(); // Submit buddypress update form.
+        e.preventDefault();
 
-        $('#aw-whats-new-submit').trigger('click');
+        if (typeof RE_Post_Activity.theme_package_id === 'undefined') {
+          return;
+        } // Click if it's legacy.
+
+
+        if ('legacy' === RE_Post_Activity.theme_package_id) {
+          $('#aw-whats-new-submit').trigger('click');
+        } else {
+          // Submit, if nouveau.
+          $('#whats-new-form').trigger('submit');
+        }
       }); // Set data in hidden fields when we click on repost button.
 
       $(document).on('click', '.bp-repost-activity', function (e) {

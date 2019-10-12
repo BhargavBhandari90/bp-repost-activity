@@ -23,6 +23,10 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 		 */
 		public function __construct() {
 
+			if ( function_exists( 'buddypress' ) ) {
+				return;
+			}
+
 			// Add settings.
 			add_action( 'bp_register_admin_settings', array( $this, 'bprpa_register_admin_settings' ) );
 

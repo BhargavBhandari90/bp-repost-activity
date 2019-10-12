@@ -20,11 +20,11 @@ msgstr ""
 msgid "%s works with BuddyPress only. Please activate BuddyPress or de-activate %s."
 msgstr ""
 
-#: app/admin/class-bp-repost-activity-admin.php:41
+#: app/admin/class-bp-repost-activity-admin.php:45
 msgid "Re-Post Activity"
 msgstr ""
 
-#: app/admin/class-bp-repost-activity-admin.php:62
+#: app/admin/class-bp-repost-activity-admin.php:66
 msgid "Allow users to re-post activity from activity stream"
 msgstr ""
 
