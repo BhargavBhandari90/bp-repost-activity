@@ -38,6 +38,8 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Add popup mokup in footer.
 			add_action( 'wp_footer', array( $this, 'bprpa_popup_markup' ) );
 
+			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_media' ), 10, 3 );
+
 		}
 
 		/**
@@ -201,6 +203,14 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			 */
 			$content = apply_filters( 'bprpa_activity_content', $content, $original_item_id );
 
+			/**
+			 * To allow media to be saved while re-posting.
+			 * Removed this action, because while reposting medias,
+			 * we will have links in our copied content.
+			 * So we don't want to moderate those media links while re-posting.
+			 */
+			remove_action( 'bp_activity_before_save', 'bp_activity_check_moderation_keys', 2, 1 );
+
 			return $content;
 
 		}
@@ -237,6 +247,37 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		}
 
 		/**
+		 * Get activity by activity id.
+		 *
+		 * @param  int $activty_id
+		 * @return obj
+		 */
+		public function bprpa_get_media( $activty_id = '' ) {
+
+			// Bail, if anything goes wrong.
+			if ( ! $this->bprpa_is_activity_strem() || empty( $activty_id ) ) {
+				return;
+			}
+
+			global $wpdb;
+
+			// Activity table
+			$media_table = $wpdb->prefix . 'rt_rtm_media';
+
+			// Sql query for getting activity record by activity id.
+			$media_sql = $wpdb->prepare(
+				"SELECT * FROM {$media_table} WHERE activity_id = %d",
+				intval( $activty_id )
+			);
+
+			// Get result.
+			$media = $wpdb->get_results( $media_sql, ARRAY_A );
+
+			return $media;
+
+		}
+
+		/**
 		 * Check if the page is activity stream of user activity, group activity or main activity.
 		 *
 		 * @return bool
@@ -269,6 +310,68 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			return false;
+
+		}
+
+		/**
+		 * Clone rtmedia data.
+		 *
+		 * @param  string $updated_content
+		 * @param  int    $user_id
+		 * @param  int    $activity_id
+		 * @return void
+		 */
+		public function bprpa_save_media( $updated_content, $user_id, $activity_id ) {
+
+			// Bail, if anything goes wrong.
+			if ( ! class_exists( 'RTMediaBuddyPressActivity' ) ||
+				 empty( $user_id ) ||
+				 empty( $activity_id ) ) {
+				return;
+			}
+
+			// Get activity id which we are going to re-post.
+			$original_item_id = filter_input( INPUT_POST , 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+
+			if ( empty( $original_item_id ) ) {
+				return;
+			}
+
+			/* Save media */
+			$media = $this->bprpa_get_media( $original_item_id );
+
+			if ( ! empty( $media ) ) {
+
+				global $wpdb;
+
+				// Media table
+				$media_table = $wpdb->prefix . 'rt_rtm_media';
+
+				foreach ( $media as $copied_media ) {
+
+					if ( isset( $copied_media['id'] ) ) {
+						unset( $copied_media['id'] );
+					}
+
+					if ( isset( $copied_media['activity_id'] ) ) {
+						unset( $copied_media['activity_id'] );
+						$copied_media['activity_id'] = $activity_id;
+					}
+
+					if ( isset( $copied_media['media_author'] ) ) {
+						unset( $copied_media['media_author'] );
+						$copied_media['media_author'] = $user_id;
+					}
+
+					$wpdb->insert(
+						$media_table,
+						$copied_media
+					);
+
+				}
+
+			}
+			/* End Save media */
 
 		}
 
