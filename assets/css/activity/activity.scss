@@ -10,6 +10,11 @@ html {
 	    overflow: hidden;
 	    overflow-y: scroll;
 	}
+	.modal-footer {
+		button {
+			color: #fff;
+		}
+	}
 }
 
 #repost-activity-form {
