@@ -16,38 +16,39 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#. translators: %1$s: Plugin's name, %2$s: Plugin's name
 #: bp-repost-activity.php:84
-msgid "%s works with BuddyPress only. Please activate BuddyPress or de-activate %s."
+msgid "%1$s works with BuddyPress only. Please activate BuddyPress or de-activate %2$s."
 msgstr ""
 
-#: app/admin/class-bp-repost-activity-admin.php:45
+#: app/admin/class-bp-repost-activity-admin.php:47
 msgid "Re-Post Activity"
 msgstr ""
 
-#: app/admin/class-bp-repost-activity-admin.php:66
+#: app/admin/class-bp-repost-activity-admin.php:68
 msgid "Allow users to re-post activity from activity stream"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:62
+#: app/main/class-bp-repost-activity.php:66
 msgid "Post in"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:65
+#: app/main/class-bp-repost-activity.php:69
 msgid "Public"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:68
+#: app/main/class-bp-repost-activity.php:72
 msgid "Group"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:87
+#: app/main/class-bp-repost-activity.php:96
 msgid "Close"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:88
+#: app/main/class-bp-repost-activity.php:97
 msgid "Post"
 msgstr ""
 
-#: app/main/class-bp-repost-activity.php:111
+#: app/main/class-bp-repost-activity.php:120
 msgid "Re-Post"
 msgstr ""

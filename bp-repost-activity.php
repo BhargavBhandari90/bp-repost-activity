@@ -51,7 +51,7 @@ if ( ! defined( 'BPRPA_BASE_NAME' ) ) {
 function bprpa_text_domain_loader() {
 
 	// Get mo file as per current locale.
-	$mofile = BPRPA_PATH . 'languages/' . get_locale() .'.mo';
+	$mofile = BPRPA_PATH . 'languages/' . get_locale() . '.mo';
 
 	// If file does not exists, then applu default mo.
 	if ( ! file_exists( $mofile ) ) {
@@ -79,9 +79,9 @@ function bprpa_admin_notice_error() {
 	$plugin_data = get_plugin_data( __FILE__ );
 	$plugin_name = $plugin_data['Name'];
 
-	// Display error if BuddyPress is not active.
 	$message = sprintf(
-		__( '%s works with BuddyPress only. Please activate BuddyPress or de-activate %s.', 'bp-repost-activity' ),
+		/* translators: %1$s: Plugin's name, %2$s: Plugin's name */
+		__( '%1$s works with BuddyPress only. Please activate BuddyPress or de-activate %2$s.', 'bp-repost-activity' ),
 		esc_html( $plugin_name ),
 		esc_html( $plugin_name )
 	);

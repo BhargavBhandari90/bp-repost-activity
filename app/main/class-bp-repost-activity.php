@@ -6,8 +6,7 @@
  */
 
 /**
- * Exit if accessed directly
- *
+ * Exit if accessed directly.
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // If class is exist, then don't execute this.
 if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
+	/**
+	 * Class for Activity Re-post.
+	 */
 	class BP_Repost_Activity {
 
 		/**
@@ -54,44 +56,49 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			?>
 			<div id="repost-box" class="modal fade" role="dialog">
-			  <div class="modal-dialog">
-				<form id="repost-activity-form">
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="modal-dialog">
+					<form id="repost-activity-form">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
 
-							<?php esc_html_e( 'Post in', 'bp-repost-activity' ) ?>:
-							<select name="posting_at" id="posting_at">
-								<option value="">
-									<?php esc_html_e( 'Public', 'bp-repost-activity' ) ?>
-								</option>
-								<option value="groups">
-									<?php esc_html_e( 'Group', 'bp-repost-activity' ) ?>
-								</option>
-							</select>
+								<?php esc_html_e( 'Post in', 'bp-repost-activity' ); ?>:
+								<select name="posting_at" id="posting_at">
+									<option value="">
+										<?php esc_html_e( 'Public', 'bp-repost-activity' ); ?>
+									</option>
+									<option value="groups">
+										<?php esc_html_e( 'Group', 'bp-repost-activity' ); ?>
+									</option>
+								</select>
 
-							<select name="rpa_group_id" id="rpa_group_id" style="display: none;">
-								<?php if ( bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' ) ) :
-									while ( bp_groups() ) : bp_the_group(); ?>
+								<select name="rpa_group_id" id="rpa_group_id" style="display: none;">
+									<?php
+									if ( bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' ) ) :
+										while ( bp_groups() ) :
+											bp_the_group();
+											?>
 
-										<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
+											<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
 
-									<?php endwhile;
-								endif; ?>
-							</select>
+											<?php
+										endwhile;
+									endif;
+									?>
+								</select>
+							</div>
+							<div class="modal-body">
+								<input type="hidden" name="original_item_id" id="original_item_id" value="" />
+								<div class="content"></div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
+								<button type="submit" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Post', 'bp-repost-activity' ); ?></button>
+							</div>
 						</div>
-						<div class="modal-body">
-							<input type="hidden" name="original_item_id" id="original_item_id" value="" />
-							<div class="content"></div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ) ?></button>
-							<button type="submit" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Post', 'bp-repost-activity' ) ?></button>
-						</div>
-					</div>
-				</form>
-			  </div> <!-- End .modal-dialog -->
+					</form>
+				</div> <!-- End .modal-dialog -->
 			</div> <!-- End #repost-box -->
 			<?php
 		}
@@ -129,7 +136,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				'repost-script',
 				BPRPA_URL . 'assets/js/custom.min.js',
 				'',
-				'',
+				BPRPA_VERSION,
 				true
 			);
 
@@ -138,20 +145,26 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				'bootstrap-script',
 				BPRPA_URL . 'assets/js/bootstrap.min.js',
 				array( 'jquery' ),
-				'',
+				BPRPA_VERSION,
 				true
 			);
 
 			// Custom style.
 			wp_enqueue_style(
 				'repost-style',
-				BPRPA_URL . 'assets/css/style.min.css'
+				BPRPA_URL . 'assets/css/style.min.css',
+				'',
+				BPRPA_VERSION,
+				''
 			);
 
 			// Bootstrap css.
 			wp_enqueue_style(
 				'bootstrap-style',
-				BPRPA_URL . 'assets/css/bootstrap.min.css'
+				BPRPA_URL . 'assets/css/bootstrap.min.css',
+				'',
+				BPRPA_VERSION,
+				''
 			);
 
 			// Set params to be used in custom script.
@@ -168,7 +181,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Set content from original activity.
 		 *
-		 * @param  string $content
+		 * @param  string $content Activity content.
 		 * @return string
 		 */
 		public function bprpa_repost_activity_content( $content ) {
@@ -179,7 +192,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			// Get activity id which we are going to re-post.
-			$original_item_id = filter_input( INPUT_POST , 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+			$original_item_id = filter_input( INPUT_POST, 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
 
 			// Return if it's blank.
 			if ( empty( $original_item_id ) ) {
@@ -218,7 +231,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Get activity by activity id.
 		 *
-		 * @param  int $activty_id
+		 * @param  int $activty_id Activity ID.
 		 * @return obj
 		 */
 		public function bprpa_get_activity( $activty_id = '' ) {
@@ -228,19 +241,30 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				return;
 			}
 
+			// Get result from transient.
+			$activity = get_transient( 'bprpa_activity_' . $activty_id );
+
+			if ( false !== $activity ) {
+				return $activity;
+			}
+
 			global $wpdb;
 
-			// Activity table
+			// Activity table.
 			$activty_table = $wpdb->prefix . 'bp_activity';
 
 			// Sql query for getting activity record by activity id.
-			$activity_sql = $wpdb->prepare(
-				"SELECT * FROM {$activty_table} WHERE id = %d",
-				intval( $activty_id )
+			$activity = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM {$activty_table} WHERE id = %d", // @codingStandardsIgnoreLine
+					intval( $activty_id )
+				)
 			);
 
-			// Get result.
-			$activity = $wpdb->get_row( $activity_sql );
+			// Set transient.
+			if ( ! empty( $activity ) ) {
+				set_transient( 'bprpa_activity_' . $activty_id, $activity, 24 * HOUR_IN_SECONDS );
+			}
 
 			return $activity;
 
@@ -249,29 +273,39 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Get activity by activity id.
 		 *
-		 * @param  int $activty_id
+		 * @param  int $activity_id Activity ID.
 		 * @return obj
 		 */
-		public function bprpa_get_media( $activty_id = '' ) {
+		public function bprpa_get_media( $activity_id = '' ) {
 
 			// Bail, if anything goes wrong.
-			if ( ! $this->bprpa_is_activity_strem() || empty( $activty_id ) ) {
+			if ( ! $this->bprpa_is_activity_strem() || empty( $activity_id ) ) {
 				return;
+			}
+
+			$media = get_transient( 'bprpa_media_activity_' . $activity_id );
+
+			if ( false !== $media ) {
+				return $media;
 			}
 
 			global $wpdb;
 
-			// Activity table
+			// Activity table.
 			$media_table = $wpdb->prefix . 'rt_rtm_media';
 
 			// Sql query for getting activity record by activity id.
-			$media_sql = $wpdb->prepare(
-				"SELECT * FROM {$media_table} WHERE activity_id = %d",
-				intval( $activty_id )
+			$media = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$media_table} WHERE activity_id = %d", // @codingStandardsIgnoreLine
+					intval( $activity_id )
+				),
+				ARRAY_A
 			);
 
-			// Get result.
-			$media = $wpdb->get_results( $media_sql, ARRAY_A );
+			if ( ! empty( $media ) ) {
+				set_transient( 'bprpa_media_activity_' . $activity_id, $media, 24 * HOUR_IN_SECONDS );
+			}
 
 			return $media;
 
@@ -286,24 +320,24 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Bail, if anything goes wrong.
 			if ( ! function_exists( 'bp_is_current_component' ) ||
-				 ! function_exists( 'bp_is_single_activity' ) ||
-				 ! function_exists( 'bp_is_group_activity' ) ||
-				 ! function_exists( 'bp_get_option' ) ) {
+				! function_exists( 'bp_is_single_activity' ) ||
+				! function_exists( 'bp_is_group_activity' ) ||
+				! function_exists( 'bp_get_option' ) ) {
 
 				return false;
 
 			}
 
 			// Check if it's enabled from BuddyPress Settings.
-			if ( '1' != bp_get_option( '_bprpa_enable_setting', 1 ) ) {
+			if ( '1' !== bp_get_option( '_bprpa_enable_setting', 1 ) ) {
 				return false;
 			}
 
-			// If it's activity stram of user activity, group activity or main activity
+			// If it's activity stram of user activity, group activity or main activity.
 			if ( is_user_logged_in() &&
-				 bp_is_current_component('activity') &&
-				 ! bp_is_single_activity() ||
-				 bp_is_group_activity() ) {
+				bp_is_current_component( 'activity' ) &&
+				! bp_is_single_activity() ||
+				bp_is_group_activity() ) {
 
 				return true;
 
@@ -316,22 +350,22 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Clone rtmedia data.
 		 *
-		 * @param  string $updated_content
-		 * @param  int    $user_id
-		 * @param  int    $activity_id
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $activity_id     Activity ID.
 		 * @return void
 		 */
 		public function bprpa_save_media( $updated_content, $user_id, $activity_id ) {
 
 			// Bail, if anything goes wrong.
 			if ( ! class_exists( 'RTMediaBuddyPressActivity' ) ||
-				 empty( $user_id ) ||
-				 empty( $activity_id ) ) {
+				empty( $user_id ) ||
+				empty( $activity_id ) ) {
 				return;
 			}
 
 			// Get activity id which we are going to re-post.
-			$original_item_id = filter_input( INPUT_POST , 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+			$original_item_id = filter_input( INPUT_POST, 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
 
 			if ( empty( $original_item_id ) ) {
 				return;
@@ -344,7 +378,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 				global $wpdb;
 
-				// Media table
+				// Media table.
 				$media_table = $wpdb->prefix . 'rt_rtm_media';
 
 				foreach ( $media as $copied_media ) {
@@ -353,16 +387,19 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 						unset( $copied_media['id'] );
 					}
 
+					// Set new activity id.
 					if ( isset( $copied_media['activity_id'] ) ) {
 						unset( $copied_media['activity_id'] );
 						$copied_media['activity_id'] = $activity_id;
 					}
 
+					// Set new activity author id.
 					if ( isset( $copied_media['media_author'] ) ) {
 						unset( $copied_media['media_author'] );
 						$copied_media['media_author'] = $user_id;
 					}
 
+					// Insert data.
 					$wpdb->insert(
 						$media_table,
 						$copied_media
@@ -370,6 +407,12 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 				}
 
+				$media_activity_text = bp_activity_get_meta( $original_item_id, 'bp_activity_text' );
+
+				// Update activity text.
+				if ( ! empty( $media_activity_text ) ) {
+					bp_activity_update_meta( $activity_id, 'bp_activity_text', bp_activity_filter_kses( $media_activity_text ) );
+				}
 			}
 			/* End Save media */
 

@@ -7,7 +7,6 @@
 
 /**
  * Exit if accessed directly
- *
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,6 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // If class is exist, then don't execute this.
 if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 
+	/**
+	 * Calls for admin methods.
+	 */
 	class BP_Repost_Activity_Admin {
 
 		/**
@@ -77,7 +79,12 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 		 * @return bool True if activity comments are disabled for blog and forum
 		 *              items, otherwise false.
 		 */
-		function bprpa_enable_disable_option_value( $default = 0 ) {
+		public function bprpa_enable_disable_option_value( $default = 0 ) {
+
+			// Bail, if anything goes wrong.
+			if ( ! function_exists( 'bp_get_option' ) ) {
+				return;
+			}
 
 			/**
 			 * Filters whether or not re-post activity is disabled.
