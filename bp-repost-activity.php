@@ -4,7 +4,7 @@
  * Plugin URI:      https://bhargavb.wordpress.com/
  * Description:     Re-post activity.
  * Author:          Bunty
- * Author URI:      https://bhargavb.wordpress.com/
+ * Author URI:      https://bhargavb.wordpress.com/about/
  * Text Domain:     bp-repost-activity
  * Domain Path:     /languages
  * Version:         1.0.0
