@@ -62,9 +62,8 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-
 								<?php esc_html_e( 'Post in', 'bp-repost-activity' ); ?>:
-								<select name="posting_at" id="posting_at">
+								<select class="form-control" name="posting_at" id="posting_at">
 									<option value="">
 										<?php esc_html_e( 'Public', 'bp-repost-activity' ); ?>
 									</option>
@@ -72,21 +71,14 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 										<?php esc_html_e( 'Group', 'bp-repost-activity' ); ?>
 									</option>
 								</select>
-
+								<?php if ( bp_is_active( 'groups' ) && bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' ) ) : ?>
 								<select name="rpa_group_id" id="rpa_group_id" style="display: none;">
-									<?php
-									if ( bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' ) ) :
-										while ( bp_groups() ) :
-											bp_the_group();
-											?>
-
-											<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
-
-											<?php
-										endwhile;
-									endif;
-									?>
+									<?php while ( bp_groups() ) : ?>
+										<?php bp_the_group(); ?>
+										<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
+									<?php endwhile; ?>
 								</select>
+								<?php endif; ?>
 							</div>
 							<div class="modal-body">
 								<input type="hidden" name="original_item_id" id="original_item_id" value="" />
@@ -115,7 +107,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Markup for button.
 			printf(
-				'<a class="button bp-repost-activity" href="#" data-toggle="modal" data-target="#repost-box" data-activity_id="%d">%s&nbsp;<span class="dashicons dashicons-controls-repeat"></span></a>',
+				'<div class="generic-button"><a href="#" class="button bp-secondary-action bp-repost-activity" aria-pressed="false" style="" data-toggle="modal" data-target="#repost-box" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span></a></div>',
 				intval( bp_get_activity_id() ),
 				esc_html__( 'Re-Post', 'bp-repost-activity' )
 			);
