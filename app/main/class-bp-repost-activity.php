@@ -56,12 +56,11 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			?>
 			<div id="repost-box" class="modal fade" role="dialog">
-				<div class="modal-dialog">
 					<form id="repost-activity-form">
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<span type="button" class="close" data-dismiss="modal">&times;</span>
 								<?php esc_html_e( 'Post in', 'bp-repost-activity' ); ?>:
 								<select class="form-control" name="posting_at" id="posting_at">
 									<option value="">
@@ -90,7 +89,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 							</div>
 						</div>
 					</form>
-				</div> <!-- End .modal-dialog -->
 			</div> <!-- End #repost-box -->
 			<?php
 		}
@@ -144,16 +142,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Custom style.
 			wp_enqueue_style(
 				'repost-style',
-				BPRPA_URL . 'assets/css/style.min.css',
-				'',
-				BPRPA_VERSION,
-				''
-			);
-
-			// Bootstrap css.
-			wp_enqueue_style(
-				'bootstrap-style',
-				BPRPA_URL . 'assets/css/bootstrap.min.css',
+				BPRPA_URL . 'assets/css/style.css',
 				'',
 				BPRPA_VERSION,
 				''
