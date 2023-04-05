@@ -56,6 +56,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			?>
 			<div id="repost-box" class="modal fade" role="dialog">
+				<div class='modal-dialog'>
 					<form id="repost-activity-form">
 						<!-- Modal content-->
 						<div class="modal-content">
@@ -89,6 +90,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 							</div>
 						</div>
 					</form>
+				</div><!-- End .modal-dialog -->
 			</div> <!-- End #repost-box -->
 			<?php
 		}
@@ -105,7 +107,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Markup for button.
 			printf(
-				'<div class="generic-button"><a href="#" class="button bp-secondary-action bp-repost-activity" aria-pressed="false" style="" data-toggle="modal" data-target="#repost-box" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span></a></div>',
+				'<div class="generic-button"><a href="#" class="button bp-secondary-action bp-repost-activity" aria-pressed="false" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span></a></div>',
 				intval( bp_get_activity_id() ),
 				esc_html__( 'Re-Post', 'bp-repost-activity' )
 			);
@@ -133,7 +135,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Bootstrap js.
 			wp_enqueue_script(
 				'bootstrap-script',
-				BPRPA_URL . 'assets/js/bootstrap.min.js',
+				BPRPA_URL . 'assets/js/modal.js',
 				array( 'jquery' ),
 				BPRPA_VERSION,
 				true
