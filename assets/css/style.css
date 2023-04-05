@@ -6,18 +6,6 @@
 	height: auto !important;
 }
 
-.hidden {
-	display: none;
-}
-
-.open {
-	display: block !important;
-}
-
-.modal-open {
-	overflow: hidden;
-}
-
 .modal {
 	display: none;
 	position: fixed;

@@ -55,7 +55,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			?>
-			<div id="repost-box" class="modal fade" role="dialog">
+			<div id="repost-box" class="modal" role="dialog">
 				<div class='modal-dialog'>
 					<form id="repost-activity-form">
 						<!-- Modal content-->
@@ -85,7 +85,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 								<div class="content"></div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
+								<button type="button" id="bprpa-close-modal" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
 								<button type="submit" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Post', 'bp-repost-activity' ); ?></button>
 							</div>
 						</div>
@@ -126,7 +126,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Custom plugin script.
 			wp_enqueue_script(
 				'repost-script',
-				BPRPA_URL . 'assets/js/custom.min.js',
+				BPRPA_URL . 'assets/js/custom.js',
 				'',
 				BPRPA_VERSION,
 				true
