@@ -42,6 +42,10 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_media' ), 10, 3 );
 
+			// Save repost activity status in meta.
+			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_repost_status' ), 10, 3 );
+			add_action( 'bp_groups_posted_update', array( $this, 'bprpa_save_group_repost_status' ), 10, 4 );
+
 		}
 
 		/**
@@ -421,6 +425,35 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 			/* End Save media */
 
+		}
+
+		/**
+		 * Save Repost activity status in meta.
+		 *
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $activity_id     Activity ID.
+		 * @return void
+		 */
+		public function bprpa_save_repost_status( $updated_content, $user_id, $activity_id ) {
+			if ( 'repost' === $updated_content ) {
+				bp_activity_update_meta( $activity_id, 'bp_activity_reposted', true );
+			}
+		}
+
+		/**
+		 * Save Group repost activity status in meta.
+		 *
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $group_id        Group ID.
+		 * @param  int    $activity_id     Activity ID.
+		 * @return void
+		 */
+		public function bprpa_save_group_repost_status( $updated_content, $user_id, $group_id, $activity_id ) {
+			if ( 'repost' === $updated_content ) {
+				bp_activity_update_meta( $activity_id, 'bp_activity_reposted', true );
+			}
 		}
 
 	}
