@@ -124,3 +124,7 @@ button.close {
 .bp-repost-activity:before {
 	content: "\f515";
 }
+
+.bprpa-share-icon:before {
+	color:slategray
+}
