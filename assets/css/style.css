@@ -67,7 +67,9 @@
 .modal-body {
 	position: relative;
 	padding: 15px;
-	max-height: 300px; overflow: hidden; overflow-y: scroll;
+	max-height: 300px;
+	overflow: hidden;
+	overflow-y: scroll;
 }
 
 .modal-footer {
@@ -117,4 +119,8 @@ button.close {
 
 [role="button"] {
 	cursor: pointer;
+}
+
+.bp-repost-activity:before {
+	content: "\f515";
 }

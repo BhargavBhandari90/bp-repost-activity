@@ -39,7 +39,7 @@ var currentRequest = null;
             group_args = '';
 
         if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
-          group_args = '&object=groups&item_id=' + group_id;
+          group_args = '&object=group&item_id=' + group_id;
         } // Set form data into activity ajax.
 
 
@@ -55,6 +55,7 @@ var currentRequest = null;
 					$('#repost-activity-form #original_item_id').val('');
 					$('#repost-activity-form #posting_at').val('');
           $('#repost-box').hide();
+					$('#rpa_group_id').hide();
         }
       });
     },
