@@ -34,5 +34,8 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 
 == Changelog ==
+= 1.1.0 =
+* Added identifier for Reposted Activity.
+* Bug Fixes.
 = 1.0.0 =
 * Initial release.
