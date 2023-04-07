@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 					domainPath: "/languages",
 					exclude: [".git/*", "bin/*", "node_modules/*", "tests/*"],
 					mainFile: "bp-repost-activity.php",
-					potFilename: "bp-repost-activity.pot",
+					potFilename: "default.pot",
 					potHeaders: {
 						poedit: true,
 						"x-poedit-keywordslist": true,
