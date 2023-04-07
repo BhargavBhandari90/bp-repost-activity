@@ -1,0 +1,23 @@
+{
+	"name": "biliplugins/restrict-country",
+	"autoload": {
+		"psr-4": {
+			"Bunty\\BuddyPressRepostActivity\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Bili Plugins",
+			"email": "biliplugins@gmail.com"
+		}
+	],
+	"require-dev": {
+		"automattic/vipwpcs": "^2.3",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.2"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}
