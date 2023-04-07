@@ -1,0 +1,25 @@
+name: PHPCS Linting
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  phpcs:
+    name: PHPCS Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout to plugin repository
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          tools: composer:v2
+
+      - name: Setup WPCS
+        run: |
+          composer i
+          ./vendor/bin/phpcs --standard=WordPress --extensions=php app/
