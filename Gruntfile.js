@@ -107,9 +107,12 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks("grunt-wp-i18n");
 	grunt.loadNpmTasks("grunt-wp-readme-to-markdown");
+	grunt.loadNpmTasks("grunt-contrib-cssmin");
+	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.registerTask("default", ["i18n", "readme"]);
 	grunt.registerTask("i18n", ["addtextdomain", "makepot"]);
 	grunt.registerTask("readme", ["wp_readme_to_markdown"]);
+	grunt.registerTask("minify", ["cssmin", "uglify"]);
 
 	grunt.util.linefeed = "\n";
 };
