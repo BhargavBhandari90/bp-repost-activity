@@ -128,7 +128,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				'button_attr'       => array(
 					'class'            => 'button item-button bp-secondary-action bp-tooltip bp-repost-activity',
 					'id'               => esc_attr( 'bp_activity_repost_' . $activity_id ),
-					'data-bp-tooltip'  => esc_html__( 'Re-post', 'buddypress' ),
+					'data-bp-tooltip'  => esc_html__( 'Re-post', 'bp-repost-activity' ),
 					'data-activity_id' => esc_attr( $activity_id ),
 					'aria-pressed'     => 'false',
 
