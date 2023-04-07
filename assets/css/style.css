@@ -29,7 +29,7 @@
 .modal-content {
 	position: relative;
 	background-color: #ffffff;
-	color:#000000;
+	color: #000000;
 	border: 1px solid #999999;
 	border: 1px solid rgba(0, 0, 0, 0.2);
 	border-radius: 6px;
@@ -127,5 +127,5 @@ button.close {
 }
 
 .bprpa-share-icon:before {
-	color:slategray
+	color: slategray;
 }
