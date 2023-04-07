@@ -3,7 +3,7 @@ Contributors: bhargavbhandari90
 Donate link: https://www.paypal.me/BnB90/50
 Tags: buddypress, activity, share, re-post
 Requires at least: 4.0
-Tested up to: 5.2.3
+Tested up to: 6.2.0
 Requires PHP: 5.6
 Stable tag: 1.1.0
 License: GPLv2 or later
