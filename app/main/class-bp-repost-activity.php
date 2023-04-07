@@ -472,7 +472,12 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				return $text;
 			}
 
-			return $text . ' <span class="dashicons dashicons-controls-repeat bprpa-share-icon bp-tooltip" data-bp-tooltip="Reposted"></span>';
+			$repost_status_icon = sprintf(
+				'<span class="dashicons dashicons-controls-repeat bprpa-share-icon bp-tooltip" data-bp-tooltip="%1$s"></span>',
+				esc_html__( 'Reposted', 'bp-repost-activity' )
+			);
+
+			return $text . ' ' . $repost_status_icon;
 		}
 	}
 
