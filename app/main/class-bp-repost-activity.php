@@ -153,30 +153,20 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			// Custom plugin script.
-			wp_enqueue_script(
-				'repost-script',
-				BPRPA_URL . 'assets/js/custom.js',
-				'',
-				BPRPA_VERSION,
-				true
+			wp_enqueue_style(
+				'repost-style',
+				BPRPA_URL . 'build/style-bp-repost-activity.css',
+				array(),
+				BPRPA_VERSION
 			);
 
-			// Bootstrap js.
+			// Plugin script.
 			wp_enqueue_script(
-				'bootstrap-script',
-				BPRPA_URL . 'assets/js/modal.js',
+				'repost-script',
+				BPRPA_URL . 'build/bp-repost-activity.js',
 				array( 'jquery' ),
 				BPRPA_VERSION,
 				true
-			);
-
-			// Custom style.
-			wp_enqueue_style(
-				'repost-style',
-				BPRPA_URL . 'assets/css/style.css',
-				'',
-				BPRPA_VERSION,
-				''
 			);
 
 			// Set params to be used in custom script.
