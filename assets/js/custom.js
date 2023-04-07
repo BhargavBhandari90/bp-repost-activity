@@ -10,7 +10,7 @@ var currentRequest = null;
     init: function init() {
       this.bprpa_repost();
       this.bprpa_set_param();
-      this.bprpa_reset_form();
+      // this.bprpa_reset_form();
       this.bprpa_show_whereto_post();
     },
 
@@ -39,7 +39,7 @@ var currentRequest = null;
             group_args = '';
 
         if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
-          group_args = '&object=groups&item_id=' + group_id;
+          group_args = '&object=group&item_id=' + group_id;
         } // Set form data into activity ajax.
 
 
@@ -52,7 +52,10 @@ var currentRequest = null;
         var setting_data = settings.data; // If it's related to spotlight, then run the script.
 
         if (typeof setting_data !== 'undefined' && setting_data.indexOf('original_item_id') != -1) {
-          $('#repost-box').modal('hide');
+					$('#repost-activity-form #original_item_id').val('');
+					$('#repost-activity-form #posting_at').val('');
+          $('#repost-box').hide();
+					$('#rpa_group_id').hide();
         }
       });
     },
@@ -89,7 +92,7 @@ var currentRequest = null;
      * Reset form when popup is closed.
      */
     bprpa_reset_form: function bprpa_reset_form() {
-      $('#repost-box').on('hidden.bs.modal', function () {
+      $('#repost-box').on('click', '.close', function () {
         $('#repost-activity-form #original_item_id').val('');
         $('#repost-activity-form #posting_at').val('');
       });

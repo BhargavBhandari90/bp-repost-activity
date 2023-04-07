@@ -26,7 +26,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function __construct() {
 
 			// Add repost button.
-			add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_repost_button' ) );
+			add_action( 'bp_nouveau_get_activity_entry_buttons', array( $this, 'bprpa_repost_button' ), 10, 2 );
 
 			// Add custom script.
 			add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ), 99 );
@@ -42,6 +42,13 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_media' ), 10, 3 );
 
+			// Save repost activity status in meta.
+			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_repost_status' ), 10, 3 );
+			add_action( 'bp_groups_posted_update', array( $this, 'bprpa_save_group_repost_status' ), 10, 4 );
+
+			// Add repost status on Activity Header.
+			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_show_repost_status' ), 10 );
+
 		}
 
 		/**
@@ -53,72 +60,86 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			if ( ! $this->bprpa_is_activity_strem() || ! function_exists( 'buddypress' ) ) {
 				return;
 			}
-
+			$if_bp_has_group = bp_is_active( 'groups' ) && bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' );
 			?>
-			<div id="repost-box" class="modal fade" role="dialog">
-				<div class="modal-dialog">
+			<div id="repost-box" class="modal" role="dialog">
+				<div class='modal-dialog'>
 					<form id="repost-activity-form">
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">&times;</button>
-
+								<span type="button" class="close" data-dismiss="modal">&times;</span>
 								<?php esc_html_e( 'Post in', 'bp-repost-activity' ); ?>:
-								<select name="posting_at" id="posting_at">
+								<select class="form-control" name="posting_at" id="posting_at">
 									<option value="">
 										<?php esc_html_e( 'Public', 'bp-repost-activity' ); ?>
 									</option>
+									<?php if ( $if_bp_has_group ) : ?>
 									<option value="groups">
 										<?php esc_html_e( 'Group', 'bp-repost-activity' ); ?>
 									</option>
+									<?php endif; ?>
 								</select>
-
+								<?php if ( $if_bp_has_group ) : ?>
 								<select name="rpa_group_id" id="rpa_group_id" style="display: none;">
-									<?php
-									if ( bp_has_groups( 'user_id=' . bp_loggedin_user_id() . '&type=alphabetical&max=100&per_page=100&populate_extras=0&update_meta_cache=0' ) ) :
-										while ( bp_groups() ) :
-											bp_the_group();
-											?>
-
-											<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
-
-											<?php
-										endwhile;
-									endif;
-									?>
+									<?php while ( bp_groups() ) : ?>
+										<?php bp_the_group(); ?>
+										<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
+									<?php endwhile; ?>
 								</select>
+								<?php endif; ?>
 							</div>
 							<div class="modal-body">
 								<input type="hidden" name="original_item_id" id="original_item_id" value="" />
 								<div class="content"></div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
+								<button type="button" id="bprpa-close-modal" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
 								<button type="submit" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Post', 'bp-repost-activity' ); ?></button>
 							</div>
 						</div>
 					</form>
-				</div> <!-- End .modal-dialog -->
+				</div><!-- End .modal-dialog -->
 			</div> <!-- End #repost-box -->
 			<?php
 		}
 
 		/**
 		 * Button for re-post activity.
+		 *
+		 * @param array $buttons     The list of buttons.
+		 * @param int   $activity_id The current activity ID.
 		 */
-		public function bprpa_repost_button() {
+		public function bprpa_repost_button( $buttons, $activity_id ) {
 
 			// Bail, if anything goes wrong.
 			if ( ! $this->bprpa_is_activity_strem() || function_exists( 'bp_get_activity_type' ) && 'activity_update' !== bp_get_activity_type() ) {
-				return;
+				return $buttons;
 			}
 
-			// Markup for button.
-			printf(
-				'<a class="button bp-repost-activity" href="#" data-toggle="modal" data-target="#repost-box" data-activity_id="%d">%s&nbsp;<span class="dashicons dashicons-controls-repeat"></span></a>',
-				intval( bp_get_activity_id() ),
-				esc_html__( 'Re-Post', 'bp-repost-activity' )
+			$buttons['bp_activity_report'] = array(
+				'id'                => 'bp_activity_report',
+				'position'          => 99,
+				'component'         => 'activity',
+				'parent_element'    => 'div',
+				'parent_attr'       => array(),
+				'must_be_logged_in' => true,
+				'button_element'    => 'a',
+				'button_attr'       => array(
+					'class'            => 'button item-button bp-secondary-action bp-tooltip bp-repost-activity',
+					'id'               => esc_attr( 'bp_activity_repost_' . $activity_id ),
+					'data-bp-tooltip'  => esc_html__( 'Re-post', 'bp-repost-activity' ),
+					'data-activity_id' => esc_attr( $activity_id ),
+					'aria-pressed'     => 'false',
+
+				),
+				'link_text'         => sprintf(
+					'<span class="bp-screen-reader-text">%s</span>',
+					esc_html__( 'Re-Post', 'bp-repost-activity' )
+				),
 			);
+
+			return $buttons;
 		}
 
 		/**
@@ -132,39 +153,20 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			// Custom plugin script.
-			wp_enqueue_script(
-				'repost-script',
-				BPRPA_URL . 'assets/js/custom.min.js',
-				'',
-				BPRPA_VERSION,
-				true
+			wp_enqueue_style(
+				'repost-style',
+				BPRPA_URL . 'build/style-bp-repost-activity.css',
+				array(),
+				BPRPA_VERSION
 			);
 
-			// Bootstrap js.
+			// Plugin script.
 			wp_enqueue_script(
-				'bootstrap-script',
-				BPRPA_URL . 'assets/js/bootstrap.min.js',
+				'repost-script',
+				BPRPA_URL . 'build/bp-repost-activity.js',
 				array( 'jquery' ),
 				BPRPA_VERSION,
 				true
-			);
-
-			// Custom style.
-			wp_enqueue_style(
-				'repost-style',
-				BPRPA_URL . 'assets/css/style.min.css',
-				'',
-				BPRPA_VERSION,
-				''
-			);
-
-			// Bootstrap css.
-			wp_enqueue_style(
-				'bootstrap-style',
-				BPRPA_URL . 'assets/css/bootstrap.min.css',
-				'',
-				BPRPA_VERSION,
-				''
 			);
 
 			// Set params to be used in custom script.
@@ -418,6 +420,55 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 		}
 
+		/**
+		 * Save Repost activity status in meta.
+		 *
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $activity_id     Activity ID.
+		 * @return void
+		 */
+		public function bprpa_save_repost_status( $updated_content, $user_id, $activity_id ) {
+			if ( 'repost' === $updated_content ) {
+				bp_activity_update_meta( $activity_id, 'bp_activity_reposted', true );
+			}
+		}
+
+		/**
+		 * Save Group repost activity status in meta.
+		 *
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $group_id        Group ID.
+		 * @param  int    $activity_id     Activity ID.
+		 * @return void
+		 */
+		public function bprpa_save_group_repost_status( $updated_content, $user_id, $group_id, $activity_id ) {
+			if ( 'repost' === $updated_content ) {
+				bp_activity_update_meta( $activity_id, 'bp_activity_reposted', true );
+			}
+		}
+
+		/**
+		 * Show Reposted Text on Activity header.
+		 *
+		 * @param string $text Previous bp_get_activity_action Text.
+		 */
+		public function bprpa_show_repost_status( $text ) {
+			$activity_id   = bp_get_activity_id();
+			$repost_status = bp_activity_get_meta( $activity_id, 'bp_activity_reposted', true );
+
+			if ( ! $repost_status ) {
+				return $text;
+			}
+
+			$repost_status_icon = sprintf(
+				'<span class="dashicons dashicons-controls-repeat bprpa-share-icon bp-tooltip" data-bp-tooltip="%1$s"></span>',
+				esc_html__( 'Reposted', 'bp-repost-activity' )
+			);
+
+			return $text . ' ' . $repost_status_icon;
+		}
 	}
 
 }
