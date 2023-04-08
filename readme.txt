@@ -35,7 +35,7 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 == Changelog ==
 = 1.1.2 =
-* Minor Fixes.
+* Minor Bug Fixes.
 = 1.1.1 =
 * Bug Fixes.
 = 1.1.0 =
