@@ -7,7 +7,7 @@
  * Author URI:      https://bhargavb.wordpress.com/about/
  * Text Domain:     bp-repost-activity
  * Domain Path:     /languages
- * Version:         1.1.1
+ * Version:         1.1.2
  *
  * @package         Bp_Repost_Activity
  */
@@ -21,7 +21,7 @@ if ( ! defined( 'BPRPA_VERSION' ) ) {
 	/**
 	 * The version of the plugin.
 	 */
-	define( 'BPRPA_VERSION', '1.1.1' );
+	define( 'BPRPA_VERSION', '1.1.2' );
 }
 
 if ( ! defined( 'BPRPA_PATH' ) ) {
