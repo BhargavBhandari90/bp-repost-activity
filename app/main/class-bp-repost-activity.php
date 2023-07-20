@@ -250,10 +250,10 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				return $activity;
 			}
 
-			global $wpdb;
+			global $bp, $wpdb;
 
 			// Activity table.
-			$activty_table = $wpdb->prefix . 'bp_activity';
+			$activty_table = $bp->activity->table_name;
 
 			// Sql query for getting activity record by activity id.
 			$activity = $wpdb->get_row(

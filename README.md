@@ -5,7 +5,7 @@
 **Requires at least:** 4.0  
 **Tested up to:** 6.2.0  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.1.0  
+**Stable tag:** 1.1.2  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -34,6 +34,10 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 
 ## Changelog ##
+### 1.1.2 ###
+* Minor Bug Fixes.
+### 1.1.1 ###
+* Bug Fixes.
 ### 1.1.0 ###
 * Added identifier for Reposted Activity.
 * Bug Fixes.
