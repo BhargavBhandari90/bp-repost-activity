@@ -26,7 +26,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function __construct() {
 
 			// Add repost button.
-			add_action( 'bp_nouveau_get_activity_entry_buttons', array( $this, 'bprpa_repost_button' ), 10, 2 );
+			// add_action( 'bp_nouveau_get_activity_entry_buttons', array( $this, 'bprpa_repost_button' ), 10, 2 );
 
 			// Add custom script.
 			add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ), 99 );
@@ -48,6 +48,23 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Add repost status on Activity Header.
 			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_show_repost_status' ), 10 );
+
+			/** BuddyBoss */
+
+			add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_bboss_repost_button' ) );
+
+			// Save meta data for user repost activity.
+			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_copy_meta_data_profile' ), 10, 3 );
+
+			// Save meta data for group repost activity.
+
+			add_action( 'bp_groups_posted_update', array( $this, 'bprpa_copy_meta_data_group' ), 10, 4 );
+
+			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_repost_activity_action' ), 10, 3 );
+
+			add_filter( 'bp_get_activity_content_body', array( $this, 'bprpa_repost_activity_content_body' ), 999, 2 );
+
+			add_action( 'wp_head', array( $this, 'bbrpa_repost_custom_style' ) );
 
 		}
 
@@ -469,8 +486,400 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			return $text . ' ' . $repost_status_icon;
 		}
-	}
 
+		/**
+		 * Repost Button.
+		 *
+		 * @return void
+		 */
+		public function bprpa_bboss_repost_button() {
+
+			$allowed_types = function_exists( 'bbslt_get_custom_setting' )
+				? bbslt_get_custom_setting( 'activity_setting', 'allowed_repost_activity_types' )
+				: array( 'activity_update' );
+
+			// Bail, if anything goes wrong.
+			// if ( ! $this->bprpa_is_activity_strem() || ( function_exists( 'bp_get_activity_type' ) && ! in_array( bp_get_activity_type(), $allowed_types, true ) ) ) {
+			// 	return;
+			// }
+
+			// Markup for button.
+			printf(
+				'<div class="generic-button"><a class="button popup-modal-register bp-repost-activity" href="#repost-box" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span><span class="bb-icon-repeat"></span><span class="repost-button">%s</span></a></div>',
+				intval( bp_get_activity_id() ),
+				esc_html__( 'Re-Post', 'bp-repost-activity' ),
+				esc_html__( 'Re-Post', 'bp-repost-activity' )
+			);
+		}
+
+		/**
+		 * Copy activity metadata.
+		 *
+		 * @param  string $updated_content Activity content.
+		 * @param  int    $user_id         User ID.
+		 * @param  int    $activity_id     Activity ID.
+		 * @return void
+		 */
+		public function bprpa_copy_meta_data_profile( $updated_content, $user_id, $activity_id ) {
+
+			// Bail, if anything goes wrong.
+			if ( empty( $user_id ) ||
+				empty( $activity_id ) ||
+				! function_exists( 'bp_activity_get_meta' ) ||
+				! function_exists( 'bp_activity_update_meta' ) ) {
+				return;
+			}
+
+			// Get original activity ID.
+			$original_activity_id = filter_input( INPUT_POST, 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+
+			// If not copied, then don't do anything.
+			if ( empty( $original_activity_id ) ) {
+				return;
+			}
+
+			// In case to identify.
+			bp_activity_update_meta( $activity_id, 'bp_original_activity_id', $original_activity_id );
+
+			// Copy metadata.
+			$this->bprpa_copy_activity_meta_data( $original_activity_id, $activity_id );
+		}
+
+		public function bprpa_copy_meta_data_group( $content, $user_id, $group_id, $activity_id ) {
+
+			// Bail, if anything goes wrong.
+			if ( empty( $user_id ) ||
+				empty( $group_id ) ||
+				empty( $activity_id ) ||
+				! function_exists( 'bp_activity_get_meta' ) ||
+				! function_exists( 'bp_activity_update_meta' ) ) {
+				return;
+			}
+
+			// Get original activity ID.
+			$original_activity_id = filter_input( INPUT_POST, 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+
+			// If not copied, then don't do anything.
+			if ( empty( $original_activity_id ) ) {
+				return;
+			}
+
+			// In case to identify.
+			bp_activity_update_meta( $activity_id, 'bp_original_activity_id', $original_activity_id );
+
+			// Copy metadata.
+			$this->bprpa_copy_activity_meta_data( $original_activity_id, $activity_id );
+
+		} // End bprpa_copy_meta_data_group().
+
+		/**
+		 * Add reost icon to activity.
+		 *
+		 * @param  string $actions  Action.
+		 * @param  object $activity Activity object.
+		 * @param  array  $r        Updated action.
+		 * @return string
+		 */
+		public function bprpa_repost_activity_action( $action, $activity, $r ) {
+
+			// Bail, if anything goes wrong.
+			if ( empty( $activity ) || ! function_exists( 'bp_activity_get_meta' ) ) {
+				return $action;
+			}
+
+			// Get original activity ID.
+			$original_activity_id = bp_activity_get_meta( $activity->id, 'bp_original_activity_id' );
+
+			// If not rposted, then don't do anything.
+			if ( empty( $original_activity_id ) ) {
+				return $action;
+			}
+
+			// Reposted action.
+			$action = '<span class="bb-icon-repeat"></span>&nbsp;' . $action;
+
+			return $action;
+		}
+
+		/**
+		 * Repost content.
+		 *
+		 * @param string $content
+		 * @param object $activity
+		 * @return html
+		 */
+		public function bprpa_repost_activity_content_body( $content, $activity ) {
+
+			// If share as current user, don't do anything.
+			$share_as_you_enabled = function_exists( 'bbslt_get_custom_setting' )
+				? bbslt_get_custom_setting( 'activity_setting', 're_share_as_loggedin' )
+				: false;
+
+			if ( $share_as_you_enabled ) {
+				return $content;
+			}
+
+			// Bail, if anything goes wrong.
+			if ( ! function_exists( 'bp_activity_get_meta' ) || empty( $activity ) || empty( $content ) ) {
+				return $content;
+			}
+
+			// Get original activity ID.
+			$original_activity_id = bp_activity_get_meta( $activity->id, 'bp_original_activity_id' );
+
+			// Bail, if no original activity ID.
+			if ( empty( $original_activity_id ) ) {
+				return $content;
+			}
+
+			// Get original activity object.
+			$original_activity = $this->bprpa_bp_activity_get_original( array( 'in' => $original_activity_id ) );
+
+			if ( empty( $original_activity ) ) {
+				return $content;
+			}
+
+			// Original activity author.
+			$orig_activity_author = $original_activity->user_id;
+
+			ob_start();
+
+			?>
+			<div class="bp-activity-head">
+				<div class="activity-avatar item-avatar">
+					<a href="<?php bp_core_get_user_domain( $orig_activity_author ); ?>">
+					<?php
+					bp_activity_avatar(
+						array(
+							'type'    => 'full',
+							'user_id' => $orig_activity_author,
+						)
+					);
+					?>
+					</a>
+				</div>
+
+				<div class="activity-header">
+					<?php echo $original_activity->action; ?>
+					<p class="activity-date">
+						<a href="<?php echo esc_url( bp_activity_get_permalink( $original_activity->id ) ); ?>"><?php echo bp_core_time_since( $original_activity->date_recorded ); ?></a>
+						<?php
+						if ( function_exists( 'bp_nouveau_activity_is_edited' ) ) {
+							bp_nouveau_activity_is_edited( $original_activity->id );
+						}
+						?>
+					</p>
+				</div>
+			</div>
+			<?php
+
+			$original_content = ob_get_clean();
+
+			$content = '<div class="bbars-repost-content">' . $original_content . $content . '</div>';
+
+			return $content;
+		}
+
+
+		public function bbrpa_repost_custom_style() {
+			?>
+			<style>
+				.activity-item .bbars-repost-content {
+					border: 1px solid var(--bb-content-border-color);
+					border-radius: var(--bb-block-radius);
+					padding: 15px 15px 10px;
+				}
+				.activity-item .activity-meta .repost-button {
+					color: var(--bb-headings-color) !important;
+				}
+				.activity-meta .generic-button .bb-icon-repeat:before {
+					font-size: 24px;
+				}
+				.modal-content .content {
+					border: 1px solid var(--bb-content-border-color);
+					padding: 15px 15px 10px;
+					border-radius: var(--bb-block-radius-inner);
+				}
+				.modal-content .content .activity-discussion-title-wrap a {
+					color: var(--bb-headings-color);
+				}
+				.modal-content .content .bb-content-inr-wrap {
+					display: table;
+					width: 100%;
+					box-sizing: border-box;
+				}
+				.modal-content .content .bb-content-inr-wrap .gamipress-buddypress-user-details {
+					margin-left: 10px;
+    				position: relative;
+					display: -ms-flexbox;
+					display: flex;
+					-ms-flex-wrap: wrap;
+					flex-wrap: wrap;
+					-webkit-box-align: center;
+					-ms-flex-align: center;
+					align-items: center;
+					margin: 10px 0 0;
+				}
+				.modal-content .content .bb-content-inr-wrap .gamipress-buddypress-user-details .gamipress-buddypress-ranks {
+					-webkit-box-pack: start;
+					-ms-flex-pack: start;
+					justify-content: flex-start;
+				}
+				.modal-content .content .bb-content-inr-wrap .gamipress-buddypress-user-details .gamipress-buddypress-ranks .gamipress-buddypress-rank {
+					display: -webkit-inline-box;
+					display: -ms-inline-flexbox;
+					display: inline-flex;
+					-webkit-box-align: center;
+					-ms-flex-align: center;
+					align-items: center;
+					border: 1px solid var(--bb-content-border-color);
+					padding: 3px 4px;
+					box-shadow: 0 1px 2px rgba(18, 43, 70, .12);
+					font-size: 13px;
+					color: var(--bb-body-text-color);
+					background-color: var(--bb-content-background-color);
+					border-radius: var(--bb-block-radius-inner);
+					line-height: 1.5;
+					-webkit-transition: all ease .3s;
+					transition: all ease .3s;
+				}
+				.modal-content .content .bb-content-inr-wrap .gamipress-buddypress-user-details {
+					margin-left: 10px;
+					position: relative;
+				}
+				.modal-content .content .activity-inner-meta {
+					padding: 12px;
+    				border-top: 1px solid var(--bb-content-border-color);
+					display: -webkit-box;
+					display: -ms-flexbox;
+					display: flex;
+					-webkit-box-align: center;
+					-ms-flex-align: center;
+					align-items: center;
+					-ms-flex-flow: row wrap;
+					flex-flow: row wrap;
+					margin-bottom: 15px
+				}
+				.modal-content .content .activity-inner-meta .generic-button {
+					margin: 0 10px 0 0;
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button {
+					border: none;
+					padding: 0;
+					margin: 0;
+					min-height: auto;
+					min-width: inherit;
+					color: var(--bb-primary-color);
+					background-color: transparent;
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button .comment-count {
+					margin-bottom: 0;
+					position: relative;
+					padding-left: 25px;
+					font-weight: 400;
+					font-size: 13px;
+					color: var(--bb-alternate-text-color);
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button:before {
+					content: '';
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button.bb-icon-comments-square .comment-count:before {
+					content: "\ee37";
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button.bb-icon-comment .comment-count:before {
+					content: "\e979";
+				}
+				.modal-content .content .activity-inner-meta .generic-button a.button .comment-count:before {
+					font-size: 18px;
+					font-family: bb-icons;
+					display: inline-block;
+					position: absolute;
+					left: 0;
+					top: 50%;
+					margin-top: -14px;
+					line-height: 1.6;
+					color: var(--bb-primary-color);
+				}
+			</style>
+			<?php
+		}
+
+		/**
+		 * Get original activity.
+		 *
+		 * @param array $args
+		 * @return object
+		 */
+		public function bprpa_bp_activity_get_original( $args ) {
+
+			if ( empty( $args ) || ! function_exists( 'bp_activity_get' ) ) {
+				return;
+			}
+
+			$activity   = '';
+			$activities = bp_activity_get( $args );
+
+			if ( ! empty( $activities ) ) {
+				$activity = isset( $activities['activities'][0] )
+					? $activities['activities'][0]
+					: '';
+			}
+
+			return $activity;
+
+		}
+
+		/**
+		 * Copy activity meta data.
+		 *
+		 * @param int $original_activity_id Activity id copy from.
+		 * @param int $copy_activity_id     Activity id copy to.
+		 * @return void
+		 */
+		public function bprpa_copy_activity_meta_data( $original_activity_id, $copy_activity_id ) {
+
+			// Bail, if anything goes wrong.
+			if ( empty( $copy_activity_id ) ||
+				empty( $original_activity_id ) ||
+				! function_exists( 'bp_activity_get_meta' ) ||
+				! function_exists( 'bp_activity_update_meta' ) ) {
+				return;
+			}
+
+			// Get activity meta.
+			$activity_meta = bp_activity_get_meta( $original_activity_id );
+
+			if ( ! empty( $activity_meta ) ) {
+
+				$not_allowed_meta = array(
+					'_link_embed',
+					'_link_preview_data',
+					'bp_favorite_users',
+					'favorite_count',
+					'activity_bump_date',
+				);
+
+				// Save activity meta.
+				foreach ( $activity_meta as $key => $value ) {
+
+					if ( ! empty( $value ) ) {
+
+						// Skip saving.
+						if ( in_array( $key, $not_allowed_meta ) ) {
+							continue;
+						}
+
+						$final_val = maybe_unserialize( $value[0] );
+
+						// Update meta.
+						bp_activity_update_meta( $copy_activity_id, $key, $final_val );
+
+					}
+				}
+			}
+
+		}
+	}
 }
 
 new BP_Repost_Activity();
