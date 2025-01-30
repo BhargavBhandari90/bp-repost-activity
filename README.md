@@ -1,7 +1,7 @@
 # BuddyPress Re-post Activity #
 **Contributors:** [bhargavbhandari90](https://profiles.wordpress.org/bhargavbhandari90/)  
 **Donate link:** https://www.paypal.me/BnB90/50  
-**Tags:** buddypress, activity, share, re-post  
+**Tags:** buddypress, buddyboss, activity, share, re-post  
 **Requires at least:** 4.0  
 **Tested up to:** 6.7.1  
 **Requires PHP:** 5.6  
@@ -17,6 +17,11 @@ Sometimes people like an activity and they would like to post the same activity 
 
 This plugin will fulfill the requirement of re-posting any activity.
 
+
+## Compatible with ##
+
+- BuddyPress
+- BuddyBoss
 
 ## How to use? ##
 
