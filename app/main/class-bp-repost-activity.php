@@ -40,6 +40,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Add popup mokup in footer.
 			add_action( 'wp_footer', array( $this, 'bprpa_popup_markup' ) );
 
+			// rtMedia save.
 			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_save_media' ), 10, 3 );
 
 			// Save repost activity status in meta.
@@ -49,17 +50,16 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Add repost status on Activity Header.
 			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_show_repost_status' ), 10 );
 
-			/** BuddyBoss */
-
-			add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_bboss_repost_button' ) );
+			// Repost button.
+			add_action( 'bp_activity_entry_meta', array( $this, 'bprpa_repost_button_new' ) );
 
 			// Save meta data for user repost activity.
 			add_action( 'bp_activity_posted_update', array( $this, 'bprpa_copy_meta_data_profile' ), 10, 3 );
 
 			// Save meta data for group repost activity.
-
 			add_action( 'bp_groups_posted_update', array( $this, 'bprpa_copy_meta_data_group' ), 10, 4 );
 
+			// Repost action.
 			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_repost_activity_action' ), 10, 3 );
 
 			add_filter( 'bp_get_activity_content_body', array( $this, 'bprpa_repost_activity_content_body' ), 999, 2 );
@@ -112,7 +112,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 							</div>
 							<div class="modal-footer">
 								<button type="button" id="bprpa-close-modal" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
-								<button type="submit" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Post', 'bp-repost-activity' ); ?></button>
+								<button type="submit" class="button" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Re-Post', 'bp-repost-activity' ); ?></button>
 							</div>
 						</div>
 					</form>
@@ -492,16 +492,12 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		 *
 		 * @return void
 		 */
-		public function bprpa_bboss_repost_button() {
-
-			$allowed_types = function_exists( 'bbslt_get_custom_setting' )
-				? bbslt_get_custom_setting( 'activity_setting', 'allowed_repost_activity_types' )
-				: array( 'activity_update' );
+		public function bprpa_repost_button_new() {
 
 			// Bail, if anything goes wrong.
-			// if ( ! $this->bprpa_is_activity_strem() || ( function_exists( 'bp_get_activity_type' ) && ! in_array( bp_get_activity_type(), $allowed_types, true ) ) ) {
-			// 	return;
-			// }
+			if ( ! $this->bprpa_is_activity_strem() ) {
+				return;
+			}
 
 			// Markup for button.
 			printf(
@@ -680,7 +676,11 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			return $content;
 		}
 
-
+		/**
+		 * Custom styles.
+		 *
+		 * @return void
+		 */
 		public function bbrpa_repost_custom_style() {
 			?>
 			<style>
