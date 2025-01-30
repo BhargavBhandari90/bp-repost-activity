@@ -17,6 +17,10 @@ Sometimes people like an activity and they would like to post the same activity 
 
 This plugin will fulfill the requirement of re-posting any activity.
 
+== Compatible with ==
+
+- BuddyPress
+- BuddyBoss
 
 == How to use? ==
 
