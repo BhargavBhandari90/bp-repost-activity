@@ -1,4 +1,4 @@
-<?php
+<?php // @codingStandardsIgnoreLine
 /**
  * Class for repost methods.
  *
@@ -24,9 +24,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		 * Constructor for class.
 		 */
 		public function __construct() {
-
-			// Add repost button.
-			// add_action( 'bp_nouveau_get_activity_entry_buttons', array( $this, 'bprpa_repost_button' ), 10, 2 );
 
 			// Add custom script.
 			add_action( 'wp_enqueue_scripts', array( $this, 'bprpa_enqueue_styles_scripts' ), 99 );
@@ -60,12 +57,11 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			add_action( 'bp_groups_posted_update', array( $this, 'bprpa_copy_meta_data_group' ), 10, 4 );
 
 			// Repost action.
-			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_repost_activity_action' ), 10, 3 );
+			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_repost_activity_action' ), 10, 2 );
 
 			add_filter( 'bp_get_activity_content_body', array( $this, 'bprpa_repost_activity_content_body' ), 999, 2 );
 
 			add_action( 'wp_head', array( $this, 'bbrpa_repost_custom_style' ) );
-
 		}
 
 		/**
@@ -130,7 +126,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function bprpa_repost_button( $buttons, $activity_id ) {
 
 			// Bail, if anything goes wrong.
-			if ( ! $this->bprpa_is_activity_strem() || function_exists( 'bp_get_activity_type' ) && 'activity_update' !== bp_get_activity_type() ) {
+			if ( ! $this->bprpa_is_activity_strem() || ( function_exists( 'bp_get_activity_type' ) && 'activity_update' !== bp_get_activity_type() ) ) {
 				return $buttons;
 			}
 
@@ -194,7 +190,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			);
 
 			wp_localize_script( 'repost-script', 'RE_Post_Activity', $params );
-
 		}
 
 		/**
@@ -244,7 +239,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			remove_action( 'bp_activity_before_save', 'bp_activity_check_moderation_keys', 2, 1 );
 
 			return $content;
-
 		}
 
 		/**
@@ -273,7 +267,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			$activty_table = $bp->activity->table_name;
 
 			// Sql query for getting activity record by activity id.
-			$activity = $wpdb->get_row(
+			$activity = $wpdb->get_row( // @codingStandardsIgnoreLine
 				$wpdb->prepare(
 					"SELECT * FROM {$activty_table} WHERE id = %d", // @codingStandardsIgnoreLine
 					intval( $activty_id )
@@ -286,7 +280,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			return $activity;
-
 		}
 
 		/**
@@ -314,7 +307,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			$media_table = $wpdb->prefix . 'rt_rtm_media';
 
 			// Sql query for getting activity record by activity id.
-			$media = $wpdb->get_results(
+			$media = $wpdb->get_results( // @codingStandardsIgnoreLine
 				$wpdb->prepare(
 					"SELECT * FROM {$media_table} WHERE activity_id = %d", // @codingStandardsIgnoreLine
 					intval( $activity_id )
@@ -327,7 +320,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			return $media;
-
 		}
 
 		/**
@@ -355,15 +347,14 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// If it's activity stram of user activity, group activity or main activity.
 			if ( is_user_logged_in() &&
 				bp_is_current_component( 'activity' ) &&
-				! bp_is_single_activity() ||
-				bp_is_group_activity() ) {
+				( ! bp_is_single_activity() ||
+				bp_is_group_activity() ) ) {
 
 				return true;
 
 			}
 
 			return false;
-
 		}
 
 		/**
@@ -419,7 +410,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					}
 
 					// Insert data.
-					$wpdb->insert(
+					$wpdb->insert( // @codingStandardsIgnoreLine
 						$media_table,
 						$copied_media
 					);
@@ -434,7 +425,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				}
 			}
 			/* End Save media */
-
 		}
 
 		/**
@@ -541,6 +531,15 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			$this->bprpa_copy_activity_meta_data( $original_activity_id, $activity_id );
 		}
 
+		/**
+		 * Copy metadata.
+		 *
+		 * @param string  $content Activity Content.
+		 * @param integer $user_id User ID.
+		 * @param integer $group_id Group ID.
+		 * @param integer $activity_id Activity ID.
+		 * @return void
+		 */
 		public function bprpa_copy_meta_data_group( $content, $user_id, $group_id, $activity_id ) {
 
 			// Bail, if anything goes wrong.
@@ -565,18 +564,16 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Copy metadata.
 			$this->bprpa_copy_activity_meta_data( $original_activity_id, $activity_id );
-
 		} // End bprpa_copy_meta_data_group().
 
 		/**
 		 * Add reost icon to activity.
 		 *
-		 * @param  string $actions  Action.
+		 * @param  string $action   Action.
 		 * @param  object $activity Activity object.
-		 * @param  array  $r        Updated action.
 		 * @return string
 		 */
-		public function bprpa_repost_activity_action( $action, $activity, $r ) {
+		public function bprpa_repost_activity_action( $action, $activity ) {
 
 			// Bail, if anything goes wrong.
 			if ( empty( $activity ) || ! function_exists( 'bp_activity_get_meta' ) ) {
@@ -600,8 +597,8 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Repost content.
 		 *
-		 * @param string $content
-		 * @param object $activity
+		 * @param string $content Activity Content.
+		 * @param object $activity Activity Object.
 		 * @return html
 		 */
 		public function bprpa_repost_activity_content_body( $content, $activity ) {
@@ -643,7 +640,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			?>
 			<div class="bp-activity-head">
 				<div class="activity-avatar item-avatar">
-					<a href="<?php bp_core_get_user_domain( $orig_activity_author ); ?>">
+					<a href="<?php bp_members_get_user_url( $orig_activity_author ); ?>">
 					<?php
 					bp_activity_avatar(
 						array(
@@ -655,10 +652,10 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					</a>
 				</div>
 
-				<div class="activity-header">
-					<?php echo $original_activity->action; ?>
+				<div class="activity-header abc">
+					<?php echo wp_kses_post( $original_activity->action ); ?>
 					<p class="activity-date">
-						<a href="<?php echo esc_url( bp_activity_get_permalink( $original_activity->id ) ); ?>"><?php echo bp_core_time_since( $original_activity->date_recorded ); ?></a>
+						<a href="<?php echo esc_url( bp_activity_get_permalink( $original_activity->id ) ); ?>"><?php echo wp_kses_post( bp_core_time_since( $original_activity->date_recorded ) ); ?></a>
 						<?php
 						if ( function_exists( 'bp_nouveau_activity_is_edited' ) ) {
 							bp_nouveau_activity_is_edited( $original_activity->id );
@@ -710,7 +707,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				}
 				.modal-content .content .bb-content-inr-wrap .gamipress-buddypress-user-details {
 					margin-left: 10px;
-    				position: relative;
+					position: relative;
 					display: -ms-flexbox;
 					display: flex;
 					-ms-flex-wrap: wrap;
@@ -749,7 +746,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				}
 				.modal-content .content .activity-inner-meta {
 					padding: 12px;
-    				border-top: 1px solid var(--bb-content-border-color);
+					border-top: 1px solid var(--bb-content-border-color);
 					display: -webkit-box;
 					display: -ms-flexbox;
 					display: flex;
@@ -807,7 +804,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		/**
 		 * Get original activity.
 		 *
-		 * @param array $args
+		 * @param array $args Array of arguments.
 		 * @return object
 		 */
 		public function bprpa_bp_activity_get_original( $args ) {
@@ -826,7 +823,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			}
 
 			return $activity;
-
 		}
 
 		/**
@@ -865,7 +861,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					if ( ! empty( $value ) ) {
 
 						// Skip saving.
-						if ( in_array( $key, $not_allowed_meta ) ) {
+						if ( in_array( $key, $not_allowed_meta, true ) ) {
 							continue;
 						}
 
@@ -877,7 +873,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					}
 				}
 			}
-
 		}
 	}
 }

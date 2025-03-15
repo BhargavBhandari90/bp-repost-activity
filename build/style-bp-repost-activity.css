@@ -1,4 +1,135 @@
+/*!**************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./assets/css/style.css ***!
+  \**************************************************************************************************************************************************************************/
 #repost-activity-form
 	.rtmedia-activity-container
 	.rtm-activity-media-list
-	.rtmedia-list-item{height:auto!important;width:30%!important}.modal{-webkit-overflow-scrolling:touch;background-color:#00000063;bottom:0;display:none;left:0;outline:0;padding-top:100px;position:fixed;right:0;top:0;z-index:1050}.modal-dialog{margin:10px;position:relative;width:auto}.modal-content{-webkit-background-clip:padding-box;background-clip:padding-box;background-color:#fff;border:1px solid #999;border:1px solid rgba(0,0,0,.2);border-radius:6px;box-shadow:0 3px 9px rgba(0,0,0,.5);color:#000;outline:0;position:relative}.modal-backdrop{background-color:#000;bottom:0;left:0;position:fixed;right:0;top:0;z-index:1040}.modal-header{border-bottom:1px solid #e5e5e5;min-height:16.42857143px;padding:15px}.modal-header .close{margin-top:-2px}.modal-title{line-height:1.42857143;margin:0}.modal-body{max-height:300px;overflow:hidden;overflow-y:scroll;padding:15px;position:relative}.modal-footer{border-top:1px solid #e5e5e5;padding:15px;text-align:right}.close{color:#000;filter:alpha(opacity=20);float:right;font-size:21px;font-weight:700;line-height:1;opacity:.2;text-shadow:0 1px 0 #fff}button.close{-webkit-appearance:none;background:transparent;border:0;cursor:pointer;padding:0}.close:focus,.close:hover{color:#000;cursor:pointer;filter:alpha(opacity=50);opacity:.5;text-decoration:none}@media (min-width:768px){.modal-dialog{margin:30px auto;width:600px}.modal-content{box-shadow:0 5px 15px rgba(0,0,0,.5)}}[role=button]{cursor:pointer}.bp-repost-activity:before{content:"\f515"}.bprpa-share-icon:before{color:#708090}
+	.rtmedia-list-item {
+	width: 30% !important;
+	height: auto !important;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+	-webkit-overflow-scrolling: touch;
+	outline: 0;
+	background-color: #00000063;
+	padding-top: 100px;
+}
+
+.modal-dialog {
+	position: relative;
+	width: auto;
+	margin: 10px;
+}
+
+.modal-content {
+	position: relative;
+	background-color: #ffffff;
+	color: #000000;
+	border: 1px solid #999999;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 6px;
+	box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	outline: 0;
+}
+
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1040;
+	background-color: #000000;
+}
+
+.modal-header {
+	padding: 15px;
+	border-bottom: 1px solid #e5e5e5;
+	min-height: 16.42857143px;
+}
+
+.modal-header .close {
+	margin-top: -2px;
+}
+
+.modal-title {
+	margin: 0;
+	line-height: 1.42857143;
+}
+
+.modal-body {
+	position: relative;
+	padding: 15px;
+	max-height: 300px;
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+.modal-footer {
+	padding: 15px;
+	text-align: right;
+	border-top: 1px solid #e5e5e5;
+}
+
+.close {
+	float: right;
+	font-size: 21px;
+	font-weight: bold;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	filter: alpha(opacity=20);
+	opacity: 0.2;
+}
+
+button.close {
+	-webkit-appearance: none;
+	padding: 0;
+	cursor: pointer;
+	background: transparent;
+	border: 0;
+}
+
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+@media (min-width: 768px) {
+	.modal-dialog {
+		width: 600px;
+		margin: 30px auto;
+	}
+	.modal-content {
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	}
+}
+
+[role="button"] {
+	cursor: pointer;
+}
+
+.bp-repost-activity:before {
+	content: "\f515";
+}
+
+.bprpa-share-icon:before {
+	color: slategray;
+}
+
+
+/*# sourceMappingURL=style-bp-repost-activity.css.map*/

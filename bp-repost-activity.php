@@ -90,7 +90,6 @@ function bprpa_admin_notice_error() {
 		esc_attr( $class ),
 		esc_html( $message )
 	);
-
 }
 
 add_action( 'admin_notices', 'bprpa_admin_notice_error' );

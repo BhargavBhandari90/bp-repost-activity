@@ -31,7 +31,6 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 
 			// Add settings.
 			add_action( 'bp_register_admin_settings', array( $this, 'bprpa_register_admin_settings' ) );
-
 		}
 
 		/**
@@ -53,7 +52,6 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 				register_setting( 'buddypress', '_bprpa_enable_setting', 1 );
 
 			}
-
 		}
 
 		/**
@@ -74,16 +72,16 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 		/**
 		 * Are re-post activity disabled?
 		 *
-		 * @param bool $default Optional. Fallback value if not found in the database.
+		 * @param bool $default_val Optional. Fallback value if not found in the database.
 		 *                      Default: false.
 		 * @return bool True if activity comments are disabled for blog and forum
 		 *              items, otherwise false.
 		 */
-		public function bprpa_enable_disable_option_value( $default = 0 ) {
+		public function bprpa_enable_disable_option_value( $default_val = 0 ) {
 
 			// Bail, if anything goes wrong.
 			if ( ! function_exists( 'bp_get_option' ) ) {
-				return;
+				return $default_val;
 			}
 
 			/**
@@ -91,9 +89,8 @@ if ( ! class_exists( 'BP_Repost_Activity_Admin' ) ) {
 			 *
 			 * @param bool $value Whether or not re-post activity is disabled.
 			 */
-			return apply_filters( 'bprpa_enable_disable_option_value', bp_get_option( '_bprpa_enable_setting', $default ) );
+			return apply_filters( 'bprpa_enable_disable_option_value', bp_get_option( '_bprpa_enable_setting', $default_val ) );
 		}
-
 	}
 
 }

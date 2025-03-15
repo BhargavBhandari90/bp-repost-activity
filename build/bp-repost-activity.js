@@ -1,1 +1,353 @@
-!function(){var t,i={601:function(){"use strict";var t;t=jQuery,window.BP_Repost={init:function(){this.bprpa_repost(),this.bprpa_set_param(),this.bprpa_show_whereto_post()},bprpa_set_param:function(){t.ajaxPrefilter((function(i,o,r){if(0==t(".bp-repost-activity").length)return!0;try{if(null==o.data||void 0===o.data||void 0===o.data.action)return!0}catch(t){return!0}var n=t("#repost-activity-form #original_item_id").val(),e=t("#repost-activity-form #posting_at").val(),a=t("#repost-activity-form #rpa_group_id").val(),c="";void 0!==e&&"groups"===e&&(c="&object=group&item_id="+a),void 0!==n&&""!==n&&"post_update"===o.data.action&&(i.data+="&original_item_id="+n+"&content=repost"+c)})),t(document).ajaxComplete((function(i,o,r){var n=r.data;void 0!==n&&-1!=n.indexOf("original_item_id")&&(t("#repost-activity-form #original_item_id").val(""),t("#repost-activity-form #posting_at").val(""),t("#repost-box").hide(),t("#rpa_group_id").hide())}))},bprpa_repost:function(){t(document).on("submit","#repost-activity-form",(function(i){i.preventDefault(),void 0!==RE_Post_Activity.theme_package_id&&("legacy"===RE_Post_Activity.theme_package_id?t("#aw-whats-new-submit").trigger("click"):t("#whats-new-form").trigger("submit"))})),t(document).on("click",".bp-repost-activity",(function(i){i.preventDefault();var o=t(this).data("activity_id"),r=t("#activity-stream #activity-"+o+" .activity-inner").html();t("#repost-activity-form #original_item_id").val(o),t("#repost-activity-form .content").html(r)}))},bprpa_reset_form:function(){t("#repost-box").on("click",".close",(function(){t("#repost-activity-form #original_item_id").val(""),t("#repost-activity-form #posting_at").val("")}))},bprpa_show_whereto_post:function(){t(document).on("change","#posting_at",(function(){var i=t(this).val(),o=t("#rpa_group_id");void 0!==i&&"groups"===i?o.show():o.hide()}))}},t(document).on("ready",(function(){BP_Repost.init()}))},206:function(t,i,o){"use strict";o(601),o(616)},616:function(){jQuery(document).ready((function(t){const i=t("#repost-box");t(document).on("click",".bp-repost-activity",(function(){i.show()})),t(document).on("click",".close",(function(){t("#repost-activity-form #original_item_id").val(""),t("#repost-activity-form #posting_at").val(""),i.hide(),t("#rpa_group_id").hide()})),t(document).on("click","#bprpa-close-modal",(function(){t("#repost-activity-form #original_item_id").val(""),t("#repost-activity-form #posting_at").val(""),i.hide(),t("#rpa_group_id").hide()}))}))},977:function(){}},o={};function r(t){var n=o[t];if(void 0!==n)return n.exports;var e=o[t]={exports:{}};return i[t](e,e.exports,r),e.exports}r.m=i,t=[],r.O=function(i,o,n,e){if(!o){var a=1/0;for(s=0;s<t.length;s++){o=t[s][0],n=t[s][1],e=t[s][2];for(var c=!0,p=0;p<o.length;p++)(!1&e||a>=e)&&Object.keys(r.O).every((function(t){return r.O[t](o[p])}))?o.splice(p--,1):(c=!1,e<a&&(a=e));if(c){t.splice(s--,1);var u=n();void 0!==u&&(i=u)}}return i}e=e||0;for(var s=t.length;s>0&&t[s-1][2]>e;s--)t[s]=t[s-1];t[s]=[o,n,e]},r.n=function(t){var i=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(i,{a:i}),i},r.d=function(t,i){for(var o in i)r.o(i,o)&&!r.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:i[o]})},r.o=function(t,i){return Object.prototype.hasOwnProperty.call(t,i)},function(){var t={282:0,647:0};r.O.j=function(i){return 0===t[i]};var i=function(i,o){var n,e,a=o[0],c=o[1],p=o[2],u=0;if(a.some((function(i){return 0!==t[i]}))){for(n in c)r.o(c,n)&&(r.m[n]=c[n]);if(p)var s=p(r)}for(i&&i(o);u<a.length;u++)e=a[u],r.o(t,e)&&t[e]&&t[e][0](),t[e]=0;return r.O(s)},o=self.webpackChunkbp_repost_activity=self.webpackChunkbp_repost_activity||[];o.forEach(i.bind(null,0)),o.push=i.bind(null,o.push.bind(o))}(),r.O(void 0,[647],(function(){return r(206)}));var n=r.O(void 0,[647],(function(){return r(977)}));n=r.O(n)}();
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/js/custom.js":
+/*!*****************************!*\
+  !*** ./assets/js/custom.js ***!
+  \*****************************/
+/***/ (function() {
+
+"use strict";
+
+
+/* global RE_Post_Activity */
+var currentRequest = null;
+(function ($) {
+  "use strict";
+
+  window.BP_Repost = {
+    init: function init() {
+      this.bprpa_repost();
+      this.bprpa_set_param();
+      // this.bprpa_reset_form();
+      this.bprpa_show_whereto_post();
+    },
+    /**
+     * Set perameter in ajax request for post update.
+     */
+    bprpa_set_param: function bprpa_set_param() {
+      $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        // Check if form is available or not.
+        if ($('.bp-repost-activity').length == 0) {
+          return true;
+        } // Modify options, control originalOptions, store jqXHR, etc
+
+        try {
+          if (originalOptions.data == null || typeof originalOptions.data === 'undefined' || typeof originalOptions.data.action === 'undefined') {
+            return true;
+          }
+        } catch (e) {
+          return true;
+        }
+        var original_activity_id = $('#repost-activity-form #original_item_id').val(),
+          posting_at = $('#repost-activity-form #posting_at').val(),
+          group_id = $('#repost-activity-form #rpa_group_id').val(),
+          group_args = '';
+        if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
+          group_args = '&object=group&item_id=' + group_id;
+        } // Set form data into activity ajax.
+
+        if (typeof original_activity_id !== 'undefined' && '' !== original_activity_id && originalOptions.data.action === 'post_update') {
+          options.data += '&original_item_id=' + original_activity_id + '&content=repost' + group_args;
+        }
+      });
+      $(document).ajaxComplete(function (event, xhr, settings) {
+        // Get ajax data.
+        var setting_data = settings.data; // If it's related to spotlight, then run the script.
+
+        if (typeof setting_data !== 'undefined' && setting_data.indexOf('original_item_id') != -1) {
+          $('#repost-activity-form #original_item_id').val('');
+          $('#repost-activity-form #posting_at').val('');
+          $('#repost-box').hide();
+          $('#rpa_group_id').hide();
+        }
+      });
+    },
+    bprpa_repost: function bprpa_repost() {
+      // When we submit repost form.
+      $(document).on('submit', '#repost-activity-form', function (e) {
+        e.preventDefault();
+        if (typeof RE_Post_Activity.theme_package_id === 'undefined') {
+          return;
+        } // Click if it's legacy.
+
+        if ('legacy' === RE_Post_Activity.theme_package_id) {
+          $('#aw-whats-new-submit').trigger('click');
+        } else {
+          // Submit, if nouveau.
+          $('#whats-new-form').trigger('submit');
+        }
+      }); // Set data in hidden fields when we click on repost button.
+
+      $(document).on('click', '.bp-repost-activity', function (e) {
+        e.preventDefault();
+        var activity_id = $(this).data('activity_id'),
+          original_content = $('#activity-stream #activity-' + activity_id + ' .activity-inner').html(); // Set values in hidden fields.
+
+        $('#repost-activity-form #original_item_id').val(activity_id); // Show content in popup which we are going to repost.
+
+        $('#repost-activity-form .content').html(original_content);
+      });
+    },
+    /**
+     * Reset form when popup is closed.
+     */
+    bprpa_reset_form: function bprpa_reset_form() {
+      $('#repost-box').on('click', '.close', function () {
+        $('#repost-activity-form #original_item_id').val('');
+        $('#repost-activity-form #posting_at').val('');
+      });
+    },
+    /**
+     * Show groups when select group from dropdown.
+     */
+    bprpa_show_whereto_post: function bprpa_show_whereto_post() {
+      $(document).on('change', '#posting_at', function () {
+        var posting_at = $(this).val(),
+          group_selector = $('#rpa_group_id'); // Display group dropdown if selected group.
+
+        if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
+          group_selector.show();
+        } else {
+          // Hide otherwise.
+          group_selector.hide();
+        }
+      });
+    }
+  };
+  $(document).on('ready', function () {
+    BP_Repost.init();
+  });
+})(jQuery);
+
+/***/ }),
+
+/***/ "./assets/js/index.js":
+/*!****************************!*\
+  !*** ./assets/js/index.js ***!
+  \****************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _custom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./custom */ "./assets/js/custom.js");
+/* harmony import */ var _custom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_custom__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modal */ "./assets/js/modal.js");
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_modal__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+/***/ }),
+
+/***/ "./assets/js/modal.js":
+/*!****************************!*\
+  !*** ./assets/js/modal.js ***!
+  \****************************/
+/***/ (function() {
+
+jQuery(document).ready(function ($) {
+  const modal = $("#repost-box");
+  $(document).on("click", '.bp-repost-activity', function () {
+    modal.show();
+  });
+  $(document).on("click", ".close", function () {
+    $('#repost-activity-form #original_item_id').val('');
+    $('#repost-activity-form #posting_at').val('');
+    modal.hide();
+    $('#rpa_group_id').hide();
+  });
+  $(document).on("click", "#bprpa-close-modal", function () {
+    $('#repost-activity-form #original_item_id').val('');
+    $('#repost-activity-form #posting_at').val('');
+    modal.hide();
+    $('#rpa_group_id').hide();
+  });
+});
+
+/***/ }),
+
+/***/ "./assets/css/style.css":
+/*!******************************!*\
+  !*** ./assets/css/style.css ***!
+  \******************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	!function() {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = function(result, chunkIds, fn, priority) {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var chunkIds = deferred[i][0];
+/******/ 				var fn = deferred[i][1];
+/******/ 				var priority = deferred[i][2];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) { return __webpack_require__.O[key](chunkIds[j]); })) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	!function() {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"bp-repost-activity": 0,
+/******/ 			"./style-bp-repost-activity": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = function(chunkId) { return installedChunks[chunkId] === 0; };
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
+/******/ 			var chunkIds = data[0];
+/******/ 			var moreModules = data[1];
+/******/ 			var runtime = data[2];
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some(function(id) { return installedChunks[id] !== 0; })) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkbp_repost_activity"] = self["webpackChunkbp_repost_activity"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["./style-bp-repost-activity"], function() { return __webpack_require__("./assets/js/index.js"); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["./style-bp-repost-activity"], function() { return __webpack_require__("./assets/css/style.css"); })
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;
+//# sourceMappingURL=bp-repost-activity.js.map
