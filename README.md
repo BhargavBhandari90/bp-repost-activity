@@ -41,6 +41,7 @@ This plugin will fulfill the requirement of re-posting any activity.
 ## Changelog ##
 ### 1.3.0 ###
 * Changed plguin name to Re-post Activity for BuddyPress.
+* Improve code as per latest BuddyPress
 ### 1.2.0 ###
 * BuddyBoss Compatibility.
 ### 1.1.2 ###
