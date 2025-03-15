@@ -1,13 +1,12 @@
 <?php
 /**
- * Plugin Name:     BuddyPress Re-post Activity
- * Plugin URI:      https://bhargavb.wordpress.com/
- * Description:     Re-post activity.
+ * Plugin Name:     Re-post Activity for BuddyPress
+ * Description:     Twitter like Re-post activity for BuddyPress. Compatible with BuddyBoss as well.
  * Author:          Bunty
- * Author URI:      https://bhargavb.wordpress.com/about/
+ * Author URI:      https://biliplugins.com/
  * Text Domain:     bp-repost-activity
  * Domain Path:     /languages
- * Version:         1.2.0
+ * Version:         1.3.0
  *
  * @package         Bp_Repost_Activity
  */
@@ -21,7 +20,7 @@ if ( ! defined( 'BPRPA_VERSION' ) ) {
 	/**
 	 * The version of the plugin.
 	 */
-	define( 'BPRPA_VERSION', '1.2.0' );
+	define( 'BPRPA_VERSION', '1.3.0' );
 }
 
 if ( ! defined( 'BPRPA_PATH' ) ) {

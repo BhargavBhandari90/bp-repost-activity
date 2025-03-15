@@ -1,11 +1,11 @@
-# BuddyPress Re-post Activity #
+# Re-post Activity for BuddyPress #
 **Contributors:** [bhargavbhandari90](https://profiles.wordpress.org/bhargavbhandari90/)  
 **Donate link:** https://www.paypal.me/BnB90/50  
 **Tags:** buddypress, buddyboss, activity, share, re-post  
 **Requires at least:** 4.0  
-**Tested up to:** 6.7.1  
+**Tested up to:** 6.7.2  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.2.0  
+**Stable tag:** 1.3.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -39,6 +39,8 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 
 ## Changelog ##
+### 1.3.0 ###
+* Changed plguin name to Re-post Activity for BuddyPress.
 ### 1.2.0 ###
 * BuddyBoss Compatibility.
 ### 1.1.2 ###
