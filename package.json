@@ -1,6 +1,6 @@
 {
   "name": "bp-repost-activity",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Twitter like Re-post activity for BuddyPress. Compatible with BuddyBoss as well.",
   "main": "Gruntfile.js",
   "scripts": {
