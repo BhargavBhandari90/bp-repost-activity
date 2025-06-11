@@ -34,7 +34,6 @@ var currentRequest = null;
       this.bprpa_set_param();
       // this.bprpa_reset_form();
       this.bprpa_show_whereto_post();
-      this.bprpa_show_repost_options();
     },
     /**
      * Set perameter in ajax request for post update.
@@ -74,6 +73,7 @@ var currentRequest = null;
         if (typeof setting_data !== 'undefined' && setting_data.indexOf('original_item_id') != -1) {
           $('#repost-activity-form #original_item_id').val('');
           $('#repost-activity-form #posting_at').val('');
+          $('#repost-activity-form #repost_comment').val('');
           $('#repost-box').hide();
           $('#rpa_group_id').hide();
         }
@@ -128,12 +128,6 @@ var currentRequest = null;
           // Hide otherwise.
           group_selector.hide();
         }
-      });
-    },
-    bprpa_show_repost_options: function () {
-      $(document).on('click', '.repost-btn', function () {
-        console.log($(this).next().filter('.repost-dropdown'));
-        $(this).next().filter('.repost-dropdown').addClass('show');
       });
     }
   };
