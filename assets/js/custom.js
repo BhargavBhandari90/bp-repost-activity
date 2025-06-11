@@ -36,7 +36,8 @@ var currentRequest = null;
         var original_activity_id = $('#repost-activity-form #original_item_id').val(),
             posting_at = $('#repost-activity-form #posting_at').val(),
             group_id = $('#repost-activity-form #rpa_group_id').val(),
-            group_args = '';
+            group_args = '',
+            new_content = $('#repost-activity-form #repost_comment').val()
 
         if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
           group_args = '&object=group&item_id=' + group_id;
@@ -44,7 +45,8 @@ var currentRequest = null;
 
 
         if (typeof original_activity_id !== 'undefined' && '' !== original_activity_id && originalOptions.data.action === 'post_update') {
-          options.data += '&original_item_id=' + original_activity_id + '&content=repost' + group_args;
+          var repost_content = new_content ? new_content : '';
+          options.data += '&original_item_id=' + original_activity_id + '&content=repost&repost_content=' + repost_content + group_args;
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
@@ -54,6 +56,7 @@ var currentRequest = null;
         if (typeof setting_data !== 'undefined' && setting_data.indexOf('original_item_id') != -1) {
 					$('#repost-activity-form #original_item_id').val('');
 					$('#repost-activity-form #posting_at').val('');
+          $('#repost-activity-form #repost_comment').val('');
           $('#repost-box').hide();
 					$('#rpa_group_id').hide();
         }

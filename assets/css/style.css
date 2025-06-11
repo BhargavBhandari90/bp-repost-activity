@@ -1,7 +1,4 @@
-#repost-activity-form
-	.rtmedia-activity-container
-	.rtm-activity-media-list
-	.rtmedia-list-item {
+#repost-activity-form .rtmedia-activity-container .rtm-activity-media-list .rtmedia-list-item {
 	width: 30% !important;
 	height: auto !important;
 }
@@ -112,6 +109,7 @@ button.close {
 		width: 600px;
 		margin: 30px auto;
 	}
+
 	.modal-content {
 		-webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
@@ -128,4 +126,138 @@ button.close {
 
 .bprpa-share-icon:before {
 	color: slategray;
+}
+
+.modal-dialog {
+	max-width: 600px;
+	margin: 50px auto;
+}
+
+.modal-content {
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+}
+
+.modal-header {
+	padding: 15px 20px;
+	background: #f8f9fa;
+	border-bottom: 1px solid #dee2e6;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.close {
+	margin-left: auto;
+	font-size: 24px;
+	cursor: pointer;
+	color: #6c757d;
+	border: none;
+	background: none;
+}
+
+.close:hover {
+	color: #495057;
+}
+
+.form-control {
+	padding: 6px 12px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.modal-body {
+	padding: 20px;
+}
+
+.repost-textarea {
+	width: 100%;
+	min-height: 100px;
+	padding: 12px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+	font-family: inherit;
+	font-size: 14px;
+	resize: vertical;
+	box-sizing: border-box;
+	margin-bottom: 15px;
+}
+
+.repost-textarea:focus {
+	outline: none;
+	border-color: #007cba;
+	box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.25);
+}
+
+.content {
+	background: #f8f9fa;
+	padding: 15px;
+	border-left: 3px solid #007cba;
+	border-radius: 4px;
+	margin-top: 15px;
+}
+
+.content p {
+	margin: 0;
+	color: #495057;
+	line-height: 1.5;
+}
+
+.modal-footer {
+	padding: 15px 20px;
+	background: #f8f9fa;
+	border-top: 1px solid #dee2e6;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.btn,
+.button {
+	padding: 8px 16px;
+	border: 1px solid #ced4da;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: all 0.2s;
+}
+
+.btn-default {
+	background: #f8f9fa;
+	color: #495057;
+}
+
+.btn-default:hover {
+	background: #e9ecef;
+}
+
+.button {
+	background: #007cba;
+	color: white;
+	border-color: #007cba;
+}
+
+.button:hover {
+	background: #005a87;
+	border-color: #005a87;
+}
+
+body #buddypress .bbars-repost-content {
+  border: 1px solid #e2e2e2;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.activity-list .activity-item .activity-content .reposted-content {
+  margin-bottom: 15px;
+}
+
+.activity-list .activity-item .activity-meta.action .bp-repost-activity.re-posted {
+	color: #009060;
 }

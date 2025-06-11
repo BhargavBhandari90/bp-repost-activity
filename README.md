@@ -3,9 +3,9 @@
 **Donate link:** https://www.paypal.me/BnB90/50  
 **Tags:** buddypress, buddyboss, activity, share, re-post  
 **Requires at least:** 4.0  
-**Tested up to:** 6.7.2  
+**Tested up to:** 6.8.1  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.3.0  
+**Stable tag:** 1.4.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -39,17 +39,27 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 
 ## Changelog ##
+
+### 1.4.0 ###
+* Improve popup styling.
+* Provided text field while reposting.
+
 ### 1.3.0 ###
 * Changed plguin name to Re-post Activity for BuddyPress.
 * Improve code as per latest BuddyPress
+
 ### 1.2.0 ###
 * BuddyBoss Compatibility.
+
 ### 1.1.2 ###
 * Minor Bug Fixes.
+
 ### 1.1.1 ###
 * Bug Fixes.
+
 ### 1.1.0 ###
 * Added identifier for Reposted Activity.
 * Bug Fixes.
+
 ### 1.0.0 ###
 * Initial release.

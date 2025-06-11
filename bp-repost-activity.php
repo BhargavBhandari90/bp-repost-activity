@@ -6,10 +6,17 @@
  * Author URI:      https://biliplugins.com/
  * Text Domain:     bp-repost-activity
  * Domain Path:     /languages
- * Version:         1.3.0
+ * Version:         1.4.0
  *
  * @package         Bp_Repost_Activity
  */
+
+/**
+ * Exit if accessed directly.
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Main file, contains the plugin metadata and activation processes
@@ -20,7 +27,7 @@ if ( ! defined( 'BPRPA_VERSION' ) ) {
 	/**
 	 * The version of the plugin.
 	 */
-	define( 'BPRPA_VERSION', '1.3.0' );
+	define( 'BPRPA_VERSION', '1.4.0' );
 }
 
 if ( ! defined( 'BPRPA_PATH' ) ) {
@@ -95,5 +102,6 @@ function bprpa_admin_notice_error() {
 add_action( 'admin_notices', 'bprpa_admin_notice_error' );
 
 // Include functions file.
+require BPRPA_PATH . 'app/includes/common-functions.php';
 require BPRPA_PATH . 'app/main/class-bp-repost-activity.php';
 require BPRPA_PATH . 'app/admin/class-bp-repost-activity-admin.php';

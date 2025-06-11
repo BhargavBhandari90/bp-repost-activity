@@ -81,7 +81,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 						<!-- Modal content-->
 						<div class="modal-content">
 							<div class="modal-header">
-								<span type="button" class="close" data-dismiss="modal">&times;</span>
 								<?php esc_html_e( 'Post in', 'bp-repost-activity' ); ?>:
 								<select class="form-control" name="posting_at" id="posting_at">
 									<option value="">
@@ -94,16 +93,25 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 									<?php endif; ?>
 								</select>
 								<?php if ( $if_bp_has_group ) : ?>
-								<select name="rpa_group_id" id="rpa_group_id" style="display: none;">
+								<select class="form-control" name="rpa_group_id" id="rpa_group_id" style="display: none;">
 									<?php while ( bp_groups() ) : ?>
 										<?php bp_the_group(); ?>
 										<option value="<?php bp_group_id(); ?>"><?php bp_group_name(); ?></option>
 									<?php endwhile; ?>
 								</select>
 								<?php endif; ?>
+								<span type="button" class="close" data-dismiss="modal">&times;</span>
 							</div>
 							<div class="modal-body">
 								<input type="hidden" name="original_item_id" id="original_item_id" value="" />
+								<!-- Added textarea for user comments -->
+								<textarea
+									class="repost-textarea"
+									name="repost_comment"
+									id="repost_comment"
+									placeholder="Add your comment (optional)..."
+									maxlength="280"
+								></textarea>
 								<div class="content"></div>
 							</div>
 							<div class="modal-footer">
@@ -438,6 +446,24 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function bprpa_save_repost_status( $updated_content, $user_id, $activity_id ) {
 			if ( 'repost' === $updated_content ) {
 				bp_activity_update_meta( $activity_id, 'bp_activity_reposted', true );
+
+				$original_activity_id = filter_input( INPUT_POST, 'original_item_id', FILTER_SANITIZE_NUMBER_INT );
+
+				if ( ! empty( $original_activity_id ) ) {
+
+					$count = bp_activity_get_meta( $original_activity_id, 'bp_activity_reshare_count', true );
+					$count = empty( $count ) ? 0 : intval( $count );
+					$count = ++$count;
+
+					bp_activity_update_meta( $original_activity_id, 'bp_activity_reposted_by_' . get_current_user_id(), true );
+					bp_activity_update_meta( $original_activity_id, 'bp_activity_reshare_count', $count );
+				}
+
+				// Save content added during repost to meta.
+				$new_content = filter_input( INPUT_POST, 'repost_content', FILTER_DEFAULT );
+				if ( ! empty( $new_content ) ) {
+					bp_activity_update_meta( $activity_id, 'bp_repost_content', $new_content );
+				}
 			}
 		}
 
@@ -474,6 +500,8 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				esc_html__( 'Reposted', 'bp-repost-activity' )
 			);
 
+			$text = str_replace( ' posted an', ' reposted an', $text );
+
 			return $text . ' ' . $repost_status_icon;
 		}
 
@@ -489,12 +517,17 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 				return;
 			}
 
+			$activity_id  = bp_get_activity_id();
+			$repost_count = bp_activity_get_meta( $activity_id, 'bp_activity_reshare_count', true );
+			$repost_count = ! empty( $repost_count ) ? intval( $repost_count ) : 0;
+
 			// Markup for button.
 			printf(
-				'<div class="generic-button"><a class="button popup-modal-register bp-repost-activity" href="#repost-box" data-activity_id="%d"><span class="bp-screen-reader-text">%s</span><span class="bb-icon-repeat"></span><span class="repost-button">%s</span></a></div>',
-				intval( bp_get_activity_id() ),
+				'<div class="generic-button"><a class="button popup-modal-register bp-repost-activity" href="#repost-box" data-activity_id="%d" data-bp-tooltip="%s"><span class="bp-screen-reader-text">%s</span><span class="bp-repost-count" data-repost_count="%d"></span></a></div>',
+				intval( $activity_id ),
 				esc_html__( 'Re-Post', 'bp-repost-activity' ),
-				esc_html__( 'Re-Post', 'bp-repost-activity' )
+				esc_html__( 'Re-Post', 'bp-repost-activity' ),
+				esc_attr( $repost_count )
 			);
 		}
 
@@ -603,22 +636,13 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		 */
 		public function bprpa_repost_activity_content_body( $content, $activity ) {
 
-			// If share as current user, don't do anything.
-			$share_as_you_enabled = function_exists( 'bbslt_get_custom_setting' )
-				? bbslt_get_custom_setting( 'activity_setting', 're_share_as_loggedin' )
-				: false;
-
-			if ( $share_as_you_enabled ) {
-				return $content;
-			}
-
 			// Bail, if anything goes wrong.
 			if ( ! function_exists( 'bp_activity_get_meta' ) || empty( $activity ) || empty( $content ) ) {
 				return $content;
 			}
 
 			// Get original activity ID.
-			$original_activity_id = bp_activity_get_meta( $activity->id, 'bp_original_activity_id' );
+			$original_activity_id = bp_activity_get_meta( $activity->id, 'bp_original_activity_id', true );
 
 			// Bail, if no original activity ID.
 			if ( empty( $original_activity_id ) ) {
@@ -634,6 +658,17 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			// Original activity author.
 			$orig_activity_author = $original_activity->user_id;
+			$repost_content       = bp_activity_get_meta( $activity->id, 'bp_repost_content', true );
+
+			// Text from reposted form.
+			if ( ! empty( $repost_content ) ) {
+				$repost_content = wp_sprintf(
+					'<p class="reposted-content">%s</p>',
+					esc_html( $repost_content )
+				);
+			} else {
+				$repost_content = '';
+			}
 
 			ob_start();
 
@@ -652,7 +687,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					</a>
 				</div>
 
-				<div class="activity-header abc">
+				<div class="activity-header">
 					<?php echo wp_kses_post( $original_activity->action ); ?>
 					<p class="activity-date">
 						<a href="<?php echo esc_url( bp_activity_get_permalink( $original_activity->id ) ); ?>"><?php echo wp_kses_post( bp_core_time_since( $original_activity->date_recorded ) ); ?></a>
@@ -668,7 +703,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			$original_content = ob_get_clean();
 
-			$content = '<div class="bbars-repost-content">' . $original_content . $content . '</div>';
+			$content = $repost_content . '<div class="bbars-repost-content">' . $original_content . $content . '</div>';
 
 			return $content;
 		}
@@ -681,11 +716,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		public function bbrpa_repost_custom_style() {
 			?>
 			<style>
-				.activity-item .bbars-repost-content {
-					border: 1px solid var(--bb-content-border-color);
-					border-radius: var(--bb-block-radius);
-					padding: 15px 15px 10px;
-				}
 				.activity-item .activity-meta .repost-button {
 					color: var(--bb-headings-color) !important;
 				}
@@ -853,6 +883,7 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					'bp_favorite_users',
 					'favorite_count',
 					'activity_bump_date',
+					'bp_activity_reshare_count',
 				);
 
 				// Save activity meta.
@@ -869,7 +900,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 						// Update meta.
 						bp_activity_update_meta( $copy_activity_id, $key, $final_val );
-
 					}
 				}
 			}
