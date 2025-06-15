@@ -121,8 +121,24 @@ button.close {
 	cursor: pointer;
 }
 
-.bp-repost-activity:before {
+.activity-list .activity-item .activity-meta.action .bp-repost-activity:before {
 	content: "\f515";
+}
+
+.buddyboss .activity-list .activity-item .activity-meta.action .bp-repost-activity:before {
+	content: "\f515";
+    opacity: 1;
+    font-family: 'dashicons';
+    font-size: 22px;
+    background: none;
+    cursor: pointer;
+    line-height: 1;
+    width: 22px;
+    height: 22px;
+}
+
+.buddyboss .activity-list .activity-item .activity-meta.action .bp-repost-activity:after {
+	opacity: 0;
 }
 
 .bprpa-share-icon:before {

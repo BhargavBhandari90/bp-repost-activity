@@ -14,9 +14,10 @@ Re-Post an Activity from activity stream. Re-post an activity to your group and 
 ## Description ##
 
 Sometimes people like an activity and they would like to post the same activity to their profile or group.
-
 This plugin will fulfill the requirement of re-posting any activity.
 
+## Demo ##
+https://www.youtube.com/watch?v=-rstsmCYfxk
 
 ## Compatible with ##
 

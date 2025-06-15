@@ -59,9 +59,11 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 			// Repost action.
 			add_filter( 'bp_get_activity_action', array( $this, 'bprpa_repost_activity_action' ), 10, 2 );
 
-			add_filter( 'bp_get_activity_content_body', array( $this, 'bprpa_repost_activity_content_body' ), 999, 2 );
+			add_filter( 'bp_get_activity_content_body', array( $this, 'bprpa_repost_activity_content_body' ), 99999, 2 );
 
 			add_action( 'wp_head', array( $this, 'bbrpa_repost_custom_style' ) );
+
+			add_filter( 'body_class', array( $this, 'bbrpa_body_class' ) );
 		}
 
 		/**
@@ -636,8 +638,10 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		 */
 		public function bprpa_repost_activity_content_body( $content, $activity ) {
 
+			var_dump( buddypress()->buddyboss );
+
 			// Bail, if anything goes wrong.
-			if ( ! function_exists( 'bp_activity_get_meta' ) || empty( $activity ) || empty( $content ) ) {
+			if ( ! function_exists( 'bp_activity_get_meta' ) || empty( $activity ) ) {
 				return $content;
 			}
 
@@ -672,10 +676,14 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 
 			ob_start();
 
+			$activity_author_link = function_exists( 'bp_core_get_user_domain' )
+				? bp_core_get_user_domain( $orig_activity_author )
+				: bp_members_get_user_url( $orig_activity_author );
+
 			?>
 			<div class="bp-activity-head">
 				<div class="activity-avatar item-avatar">
-					<a href="<?php bp_members_get_user_url( $orig_activity_author ); ?>">
+					<a href="<?php echo esc_url( $activity_author_link ); ?>">
 					<?php
 					bp_activity_avatar(
 						array(
@@ -903,6 +911,22 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 					}
 				}
 			}
+		}
+
+		/**
+		 * Add class to body to identify BuddyBoss
+		 *
+		 * @param array $classes Array of body Classes.
+		 * @return array         Updated array of classes.
+		 */
+		public function bbrpa_body_class( $classes ) {
+
+			// If buddyboss, then add class.
+			if ( function_exists( 'buddypress' ) && buddypress()->buddyboss ) {
+				$classes[] = 'buddyboss';
+			}
+
+			return $classes;
 		}
 	}
 }

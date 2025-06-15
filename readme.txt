@@ -17,6 +17,8 @@ Sometimes people like an activity and they would like to post the same activity 
 
 This plugin will fulfill the requirement of re-posting any activity.
 
+https://www.youtube.com/watch?v=-rstsmCYfxk
+
 == Compatible with ==
 
 - BuddyPress
