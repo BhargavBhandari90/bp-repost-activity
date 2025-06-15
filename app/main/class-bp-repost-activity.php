@@ -118,7 +118,9 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 							</div>
 							<div class="modal-footer">
 								<button type="button" id="bprpa-close-modal" class="btn btn-default" data-dismiss="modal"><?php esc_html_e( 'Close', 'bp-repost-activity' ); ?></button>
-								<button type="submit" class="button" id="repost-activity" name="repost-activity"><?php esc_html_e( 'Re-Post', 'bp-repost-activity' ); ?></button>
+								<button type="submit" class="button" id="repost-activity" name="repost-activity">
+									<span class="dashicons dashicons-update"></span>&nbsp;<?php esc_html_e( 'Re-Post', 'bp-repost-activity' ); ?>
+								</button>
 							</div>
 						</div>
 					</form>

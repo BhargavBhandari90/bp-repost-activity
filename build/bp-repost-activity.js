@@ -76,6 +76,9 @@ var currentRequest = null;
           $('#repost-activity-form #repost_comment').val('');
           $('#repost-box').hide();
           $('#rpa_group_id').hide();
+          const $btn = $('#repost-activity');
+          $btn.prop('disabled', false);
+          $btn.find('.dashicons').removeClass('spin');
         }
       });
     },
@@ -87,6 +90,9 @@ var currentRequest = null;
           return;
         } // Click if it's legacy.
 
+        const $btn = $('#repost-activity');
+        $btn.prop('disabled', true);
+        $btn.find('.dashicons').removeClass('dashicons-update').addClass('dashicons-update spin');
         if ('legacy' === RE_Post_Activity.theme_package_id) {
           $('#aw-whats-new-submit').trigger('click');
         } else {
