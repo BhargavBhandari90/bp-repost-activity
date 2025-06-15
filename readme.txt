@@ -5,7 +5,7 @@ Tags: buddypress, buddyboss, activity, share, re-post
 Requires at least: 4.0
 Tested up to: 6.8.1
 Requires PHP: 5.6
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,12 +34,17 @@ https://www.youtube.com/watch?v=-rstsmCYfxk
 2. Activate the plugin through the "Plugins" menu in WordPress.
 
 == Screenshots ==
-1. Re-post any activity by clicking on the "Re-Post" button screenshot-1.jpg.
-2. Select where to re-post screenshot-2.jpg.
-3. Enable/Disable re-post functionality screenshot-3.
+1. Re-post any activity by clicking on the "Re-Post" button.
+2. Select where to re-post.
+3. Re-posted Activity.
+4. Enable/Disable re-post functionality.
 
 
 == Changelog ==
+
+= 1.4.1 =
+* Improve popup styling.
+* Fix - Reposting was not working witn BuddyBoss.
 
 = 1.4.0 =
 * Improve popup styling.
