@@ -638,8 +638,6 @@ if ( ! class_exists( 'BP_Repost_Activity' ) ) {
 		 */
 		public function bprpa_repost_activity_content_body( $content, $activity ) {
 
-			var_dump( buddypress()->buddyboss );
-
 			// Bail, if anything goes wrong.
 			if ( ! function_exists( 'bp_activity_get_meta' ) || empty( $activity ) ) {
 				return $content;
