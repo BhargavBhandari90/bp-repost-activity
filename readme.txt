@@ -39,6 +39,11 @@ https://www.youtube.com/watch?v=-rstsmCYfxk
 3. Re-posted Activity.
 4. Enable/Disable re-post functionality.
 
+== GitHub Repo ==
+[https://github.com/BhargavBhandari90/bp-repost-activity](https://github.com/BhargavBhandari90/bp-repost-activity)
+
+== Buy Me Coffee/Beer ==
+[https://buymeacoffee.com/wpbunty](https://buymeacoffee.com/wpbunty)
 
 == Changelog ==
 
