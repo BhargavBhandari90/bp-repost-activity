@@ -120,8 +120,24 @@ button.close {
 	cursor: pointer;
 }
 
-.bp-repost-activity:before {
+.activity-list .activity-item .activity-meta.action .bp-repost-activity:before {
 	content: "\f515";
+}
+
+.buddyboss .activity-list .activity-item .activity-meta.action .bp-repost-activity:before {
+	content: "\f515";
+	opacity: 1;
+	font-family: 'dashicons';
+	font-size: 22px;
+	background: none;
+	cursor: pointer;
+	line-height: 1;
+	width: 22px;
+	height: 22px;
+}
+
+.buddyboss .activity-list .activity-item .activity-meta.action .bp-repost-activity:after {
+	opacity: 0;
 }
 
 .bprpa-share-icon:before {
@@ -246,18 +262,28 @@ button.close {
 }
 
 body #buddypress .bbars-repost-content {
-  border: 1px solid #e2e2e2;
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  position: relative;
+	border: 1px solid #e2e2e2;
+	background-color: #f9f9f9;
+	padding: 15px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	position: relative;
 }
 
 .activity-list .activity-item .activity-content .reposted-content {
-  margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .activity-list .activity-item .activity-meta.action .bp-repost-activity.re-posted {
 	color: #009060;
+}
+
+button#repost-activity .dashicons.spin {
+	animation: dashicons-spin 1s linear infinite;
+}
+
+@keyframes dashicons-spin {
+	100% {
+		transform: rotate(360deg);
+	}
 }

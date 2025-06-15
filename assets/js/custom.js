@@ -34,10 +34,10 @@ var currentRequest = null;
         }
 
         var original_activity_id = $('#repost-activity-form #original_item_id').val(),
-            posting_at = $('#repost-activity-form #posting_at').val(),
-            group_id = $('#repost-activity-form #rpa_group_id').val(),
-            group_args = '',
-            new_content = $('#repost-activity-form #repost_comment').val()
+          posting_at = $('#repost-activity-form #posting_at').val(),
+          group_id = $('#repost-activity-form #rpa_group_id').val(),
+          group_args = '',
+          new_content = $('#repost-activity-form #repost_comment').val()
 
         if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
           group_args = '&object=group&item_id=' + group_id;
@@ -54,11 +54,14 @@ var currentRequest = null;
         var setting_data = settings.data; // If it's related to spotlight, then run the script.
 
         if (typeof setting_data !== 'undefined' && setting_data.indexOf('original_item_id') != -1) {
-					$('#repost-activity-form #original_item_id').val('');
-					$('#repost-activity-form #posting_at').val('');
+          $('#repost-activity-form #original_item_id').val('');
+          $('#repost-activity-form #posting_at').val('');
           $('#repost-activity-form #repost_comment').val('');
           $('#repost-box').hide();
-					$('#rpa_group_id').hide();
+          $('#rpa_group_id').hide();
+          const $btn = $('#repost-activity');
+          $btn.prop('disabled', false);
+          $btn.find('.dashicons').removeClass('spin');
         }
       });
     },
@@ -71,6 +74,12 @@ var currentRequest = null;
           return;
         } // Click if it's legacy.
 
+        const $btn = $('#repost-activity');
+        $btn.prop('disabled', true);
+
+        $btn.find('.dashicons')
+          .removeClass('dashicons-update')
+          .addClass('dashicons-update spin');
 
         if ('legacy' === RE_Post_Activity.theme_package_id) {
           $('#aw-whats-new-submit').trigger('click');
@@ -83,7 +92,7 @@ var currentRequest = null;
       $(document).on('click', '.bp-repost-activity', function (e) {
         e.preventDefault();
         var activity_id = $(this).data('activity_id'),
-            original_content = $('#activity-stream #activity-' + activity_id + ' .activity-inner').html(); // Set values in hidden fields.
+          original_content = $('#activity-stream #activity-' + activity_id + ' .activity-inner').html(); // Set values in hidden fields.
 
         $('#repost-activity-form #original_item_id').val(activity_id); // Show content in popup which we are going to repost.
 
@@ -107,7 +116,7 @@ var currentRequest = null;
     bprpa_show_whereto_post: function bprpa_show_whereto_post() {
       $(document).on('change', '#posting_at', function () {
         var posting_at = $(this).val(),
-            group_selector = $('#rpa_group_id'); // Display group dropdown if selected group.
+          group_selector = $('#rpa_group_id'); // Display group dropdown if selected group.
 
         if ('undefined' !== typeof posting_at && 'groups' === posting_at) {
           group_selector.show();

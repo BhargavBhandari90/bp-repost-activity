@@ -5,7 +5,7 @@
 **Requires at least:** 4.0  
 **Tested up to:** 6.8.1  
 **Requires PHP:** 5.6  
-**Stable tag:** 1.4.0  
+**Stable tag:** 1.4.1  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -14,9 +14,10 @@ Re-Post an Activity from activity stream. Re-post an activity to your group and 
 ## Description ##
 
 Sometimes people like an activity and they would like to post the same activity to their profile or group.
-
 This plugin will fulfill the requirement of re-posting any activity.
 
+## Demo ##
+https://www.youtube.com/watch?v=-rstsmCYfxk
 
 ## Compatible with ##
 
@@ -39,6 +40,10 @@ This plugin will fulfill the requirement of re-posting any activity.
 
 
 ## Changelog ##
+
+### 1.4.1 ###
+* Improve popup styling.
+* Fix - Reposting was not working witn BuddyBoss.
 
 ### 1.4.0 ###
 * Improve popup styling.
